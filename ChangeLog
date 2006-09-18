@@ -1,0 +1,5 @@
+2006-09-18  Akim Demaille  <akim@lrde.epita.fr>
+
+	* configure.ac, Makefile.am: New.
+
+
