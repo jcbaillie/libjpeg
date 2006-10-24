@@ -3,6 +3,13 @@ AC_CONFIG_AUX_DIR([build-aux])
 
 AM_INIT_AUTOMAKE([1.9.6 foreign build-aux/ansi2knr])
 
+AC_ARG_ENABLE([programs],
+	      [AC_HELP_STRING([--disable-programs],
+			      [just build the library, not the programs])],
+	      [], [enable_programs=yes])
+AM_CONDITIONAL([PROGRAMS], [test x"$enable_programs" == xyes])
+
+
 AC_PROG_CC
 AC_CHECK_TYPES([unsigned char, unsigned short])
 AM_C_PROTOTYPES

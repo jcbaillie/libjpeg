@@ -36,7 +36,8 @@ APPSOURCES = cjpeg.c djpeg.c jpegtran.c rdjpgcom.c wrjpgcom.c cdjpeg.c \
 SOURCES = $(LIBSOURCES) $(SYSDEPSOURCES) $(APPSOURCES)
 
 # files included by source files
-dist_include_HEADERS = jconfig.h jpeglib.h jmorecfg.h jerror.h
+dist_include_HEADERS = jpeglib.h jmorecfg.h jerror.h
+nodist_include_HEADERS = jconfig.h
 
 # documentation, test, and support files
 DOCS = README install.doc usage.doc \
@@ -45,52 +46,38 @@ DOCS = README install.doc usage.doc \
 
 dist_man_MANS = cjpeg.1 djpeg.1 jpegtran.1 rdjpgcom.1 wrjpgcom.1 
 
-MKFILES = makefile.cfg makefile.ansi makefile.unix makefile.bcc \
-        makefile.mc6 makefile.dj makefile.wat makefile.vc makelib.ds \
-        makeapps.ds makeproj.mac makcjpeg.st makdjpeg.st makljpeg.st \
-        maktjpeg.st makefile.manx makefile.sas makefile.mms makefile.vms \
-        makvms.opt
+# Makefile templates.
+EXTRA_DIST = 								 \
+templates/makefile.cfg	 templates/makefile.ansi templates/makefile.unix \
+templates/makefile.bcc	 templates/makefile.mc6  templates/makefile.dj	 \
+templates/makefile.wat	 templates/makefile.vc   templates/makelib.ds	 \
+templates/makeapps.ds	 templates/makeproj.mac  templates/makcjpeg.st	 \
+templates/makdjpeg.st	 templates/makljpeg.st   templates/maktjpeg.st	 \
+templates/makefile.manx	 templates/makefile.sas  templates/makefile.mms	 \
+templates/makefile.vms	 templates/makvms.opt
 
-CONFIGFILES = jconfig.cfg jconfig.bcc jconfig.mc6 jconfig.dj jconfig.wat \
-        jconfig.vc jconfig.mac jconfig.st jconfig.manx jconfig.sas \
-        jconfig.vms
+# Configuration file templates.
+EXTRA_DIST +=								\
+templates/jconfig.bcc templates/jconfig.mc6 templates/jconfig.dj	\
+templates/jconfig.wat templates/jconfig.vc templates/jconfig.mac	\
+templates/jconfig.st templates/jconfig.manx templates/jconfig.sas	\
+templates/jconfig.vms
 
 OTHERFILES = jconfig.doc ckconfig.c jmemdosa.asm
 
 TESTFILES = testorig.jpg testimg.ppm testimg.bmp testimg.jpg testprog.jpg \
         testimgp.jpg
 
-EXTRA_DIST = $(DOCS) $(MKFILES) $(CONFIGFILES) $(SOURCES) $(INCLUDES) \
-        $(OTHERFILES) $(TESTFILES)
+EXTRA_DIST += $(DOCS) $(SOURCES) $(OTHERFILES) $(TESTFILES)
 
-# library object files common to compression and decompression
-#COMOBJECTS= jcomapi.o jutils.o jerror.o jmemmgr.o $(SYSDEPMEM)
 
-# compression library object files
-#CLIBOBJECTS= jcapimin.o jcapistd.o jctrans.o jcparam.o jdatadst.o jcinit.o \
-#        jcmaster.o jcmarker.o jcmainct.o jcprepct.o jccoefct.o jccolor.o \
-#        jcsample.o jchuff.o jcphuff.o jcdctmgr.o jfdctfst.o jfdctflt.o \
-#        jfdctint.o
-
-# decompression library object files
-#DLIBOBJECTS= jdapimin.o jdapistd.o jdtrans.o jdatasrc.o jdmaster.o \
-#        jdinput.o jdmarker.o jdhuff.o jdphuff.o jdmainct.o jdcoefct.o \
-#        jdpostct.o jddctmgr.o jidctfst.o jidctflt.o jidctint.o jidctred.o \
-#        jdsample.o jdcolor.o jquant1.o jquant2.o jdmerge.o
-
-# These objectfiles are included in libjpeg.a
-#LIBOBJECTS = $(CLIBOBJECTS) $(DLIBOBJECTS) $(COMOBJECTS)
-
-# object files for sample applications (excluding library files)
-#COBJECTS= cjpeg.o rdppm.o rdgif.o rdtarga.o rdrle.o rdbmp.o rdswitch.o \
-#        cdjpeg.o
-#DOBJECTS= djpeg.o wrppm.o wrgif.o wrtarga.o wrrle.o wrbmp.o rdcolmap.o \
-#        cdjpeg.o
-#TROBJECTS= 
+## ------------------------- ##
+## Programs and test suite.  ##
+## ------------------------- ##
 
 AM_LDADD = libjpeg.la
 LDADD = $(AM_LDADD)
-bin_PROGRAMS = cjpeg djpeg jpegtran rdjpgcom wrjpgcom
+jpeg_programs = cjpeg djpeg jpegtran rdjpgcom wrjpgcom
 
 cjpeg_SOURCES = cjpeg.c rdppm.c rdgif.c rdtarga.c rdrle.c rdbmp.c rdswitch.c \
         cdjpeg.c
@@ -98,11 +85,9 @@ djpeg_SOURCES = djpeg.c wrppm.c wrgif.c wrtarga.c wrrle.c wrbmp.c rdcolmap.c \
         cdjpeg.c
 jpegtran_SOURCES = jpegtran.c rdswitch.c cdjpeg.c transupp.c
 
-jconfig.h: jconfig.doc
-	echo You must prepare a system-dependent jconfig.h file.
-	echo Please read the installation directions in install.doc.
-	exit 1
 
+if PROGRAMS
+bin_PROGRAMS = $(jpeg_programs)
 check-local: cjpeg djpeg jpegtran
 	$(RM) testout*
 	./djpeg -dct int -ppm -outfile testout.ppm $(srcdir)/testorig.jpg
@@ -118,3 +103,6 @@ check-local: cjpeg djpeg jpegtran
 	cmp $(srcdir)/testimgp.jpg testoutp.jpg
 	cmp $(srcdir)/testorig.jpg testoutt.jpg
 CLEANFILES = testout*
+else
+EXTRA_PROGRAMS = $(jpeg_programs)
+endif
