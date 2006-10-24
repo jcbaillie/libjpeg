@@ -6,7 +6,7 @@ class Vcs
   protocol_version '0.1'
 
   def local_commit! ( *args )
-    common_commit!("eng-aibo <%= rev %>: <%= title %>", *args) do |subject|
+    common_commit!("jpeg <%= rev %>: <%= title %>", *args) do |subject|
       mail!(:to => %w[akim@lrde.epita.fr
                       matthieu.nottale@ensta.fr
 		      tsuna@lrde.epita.fr

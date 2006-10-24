@@ -116,7 +116,7 @@ AC_SUBST([SYSDEPMEM])
 
 AC_PROG_LIBTOOL
 
-AC_CONFIG_HEADER([jconfig.h:jconfig.cfg])
+AC_CONFIG_HEADERS([jconfig.h:jconfig.hin])
 AC_CONFIG_FILES([Makefile])
 
 AC_OUTPUT

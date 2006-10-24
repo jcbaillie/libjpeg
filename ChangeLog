@@ -1,5 +1,14 @@
 2006-10-24  Akim Demaille  <demaille@gostai.com>
 
+	config.hin
+	* jconfig.cfg: Rename as...
+	* jconfig.hin: this.
+	This avoids trigerring Make rules in *.cfg, and is
+	more traditional.
+	* configure.ac: Adjust.
+
+2006-10-24  Akim Demaille  <demaille@gostai.com>
+
 	Programs can be disabled
 	* configure.ac: Support --disable-programs.
 
