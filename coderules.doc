@@ -57,7 +57,7 @@ keywords can be inserted for use in Windows DLLs.)
 
 ansi2knr does not transform method declarations (function pointers in
 structs).  We handle these with a macro JMETHOD, defined as
-	#ifdef HAVE_PROTOTYPES
+	#ifdef PROTOTYPES
 	#define JMETHOD(type,methodname,arglist)  type (*methodname) arglist
 	#else
 	#define JMETHOD(type,methodname,arglist)  type (*methodname) ()

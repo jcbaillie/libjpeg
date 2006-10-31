@@ -184,7 +184,7 @@ uses as the standard makefile name).  The most generic makefiles we provide
 are
 	makefile.ansi:	if your C compiler supports function prototypes
 	makefile.unix:	if not.
-(You have function prototypes if ckconfig.c put "#define HAVE_PROTOTYPES"
+(You have function prototypes if ckconfig.c put "#define PROTOTYPES"
 in jconfig.h.)  You may want to start from one of the other makefiles if
 there is one for a system similar to yours.
 

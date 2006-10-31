@@ -818,7 +818,7 @@ typedef JMETHOD(boolean, jpeg_marker_parser_method, (j_decompress_ptr cinfo));
  * Note JPP requires double parentheses.
  */
 
-#ifdef HAVE_PROTOTYPES
+#ifdef PROTOTYPES
 #define JPP(arglist)	arglist
 #else
 #define JPP(arglist)	()

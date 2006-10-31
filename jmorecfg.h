@@ -196,7 +196,7 @@ typedef unsigned int JDIMENSION;
  * Again, you can customize this if you need special linkage keywords.
  */
 
-#ifdef HAVE_PROTOTYPES
+#ifdef PROTOTYPES
 #define JMETHOD(type,methodname,arglist)  type (*methodname) arglist
 #else
 #define JMETHOD(type,methodname,arglist)  type (*methodname) ()
@@ -353,7 +353,7 @@ typedef int boolean;
  */
 
 #ifndef FAST_FLOAT
-#ifdef HAVE_PROTOTYPES
+#ifdef PROTOTYPES
 #define FAST_FLOAT  float
 #else
 #define FAST_FLOAT  double
