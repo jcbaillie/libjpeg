@@ -58,12 +58,12 @@ templates/makefile.vms	 templates/makvms.opt
 
 # Configuration file templates.
 EXTRA_DIST +=								\
-templates/jconfig.bcc templates/jconfig.mc6 templates/jconfig.dj	\
-templates/jconfig.wat templates/jconfig.vc templates/jconfig.mac	\
-templates/jconfig.st templates/jconfig.manx templates/jconfig.sas	\
-templates/jconfig.vms
+templates/jconfig.bcc templates/jconfig.mc6  templates/jconfig.dj	\
+templates/jconfig.wat templates/jconfig.vc   templates/jconfig.mac	\
+templates/jconfig.st  templates/jconfig.manx templates/jconfig.sas	\
+templates/jconfig.vms templates/jconfig.doc
 
-OTHERFILES = jconfig.doc ckconfig.c jmemdosa.asm
+OTHERFILES = ckconfig.c jmemdosa.asm
 
 TESTFILES = testorig.jpg testimg.ppm testimg.bmp testimg.jpg testprog.jpg \
         testimgp.jpg
