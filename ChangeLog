@@ -1,5 +1,10 @@
 2006-11-07  Akim Demaille  <demaille@gostai.com>
 
+	No longer special case jconfig.hin
+	* bootstrap: here.
+
+2006-11-07  Akim Demaille  <demaille@gostai.com>
+
 	distcheck fixes
 	* Makefile.am (CLEANFILES): Remove jconfig.h related files.
 

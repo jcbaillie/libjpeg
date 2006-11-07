@@ -11,7 +11,4 @@ do
   fi
 done
 
-# Protect the jconfig.hin we made by hand.
-cp jconfig.hin jconfig.hin.bak
 autoreconf -f -v -i
-cp jconfig.hin.bak jconfig.hin
