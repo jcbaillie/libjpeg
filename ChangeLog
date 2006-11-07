@@ -1,5 +1,10 @@
 2006-11-07  Akim Demaille  <akim.demaille@free.fr>
 
+	Upgrade from Automake 1.10.
+	* build-aux/install-sh, build-aux/missing: Upgrade.
+
+2006-11-07  Akim Demaille  <akim.demaille@free.fr>
+
 	Upgrade config.*
 	* build-aux/config.guess, build-aux/config.sub: Upgrade.
 	From Automake 1.10.
