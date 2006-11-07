@@ -18,7 +18,7 @@
 
 #include "cdjpeg.h"		/* Common decls for cjpeg/djpeg applications */
 
-#ifdef RLE_SUPPORTED
+#ifdef LIBJPEG_RLE_SUPPORTED
 
 /* rle.h is provided by the Utah Raster Toolkit. */
 
@@ -79,7 +79,7 @@ start_output_rle (j_decompress_ptr cinfo, djpeg_dest_ptr dinfo)
   rle_dest_ptr dest = (rle_dest_ptr) dinfo;
   size_t cmapsize;
   int i, ci;
-#ifdef PROGRESS_REPORT
+#ifdef LIBJPEG_PROGRESS_REPORT
   cd_progress_ptr progress = (cd_progress_ptr) cinfo->progress;
 #endif
 
@@ -135,7 +135,7 @@ start_output_rle (j_decompress_ptr cinfo, djpeg_dest_ptr dinfo)
 
   dest->pub.put_pixel_rows = rle_put_pixel_rows;
 
-#ifdef PROGRESS_REPORT
+#ifdef LIBJPEG_PROGRESS_REPORT
   if (progress != NULL) {
     progress->total_extra_passes++;  /* count file writing as separate pass */
   }
@@ -178,7 +178,7 @@ finish_output_rle (j_decompress_ptr cinfo, djpeg_dest_ptr dinfo)
   char cmapcomment[80];
   int row, col;
   int ci;
-#ifdef PROGRESS_REPORT
+#ifdef LIBJPEG_PROGRESS_REPORT
   cd_progress_ptr progress = (cd_progress_ptr) cinfo->progress;
 #endif
 
@@ -211,7 +211,7 @@ finish_output_rle (j_decompress_ptr cinfo, djpeg_dest_ptr dinfo)
    * and (b) we are not on a machine where FAR pointers differ from regular.
    */
 
-#ifdef PROGRESS_REPORT
+#ifdef LIBJPEG_PROGRESS_REPORT
   if (progress != NULL) {
     progress->pub.pass_limit = cinfo->output_height;
     progress->pub.pass_counter = 0;
@@ -225,7 +225,7 @@ finish_output_rle (j_decompress_ptr cinfo, djpeg_dest_ptr dinfo)
         ((j_common_ptr) cinfo, dest->image,
 	 (JDIMENSION) row, (JDIMENSION) 1, FALSE);
       rle_putrow(rle_row, (int) cinfo->output_width, &header);
-#ifdef PROGRESS_REPORT
+#ifdef LIBJPEG_PROGRESS_REPORT
       if (progress != NULL) {
         progress->pub.pass_counter++;
         (*progress->pub.progress_monitor) ((j_common_ptr) cinfo);
@@ -247,7 +247,7 @@ finish_output_rle (j_decompress_ptr cinfo, djpeg_dest_ptr dinfo)
         *blue++ = GETJSAMPLE(*output_row++);
       }
       rle_putrow(rle_row, (int) cinfo->output_width, &header);
-#ifdef PROGRESS_REPORT
+#ifdef LIBJPEG_PROGRESS_REPORT
       if (progress != NULL) {
         progress->pub.pass_counter++;
         (*progress->pub.progress_monitor) ((j_common_ptr) cinfo);
@@ -256,7 +256,7 @@ finish_output_rle (j_decompress_ptr cinfo, djpeg_dest_ptr dinfo)
     }
   }
 
-#ifdef PROGRESS_REPORT
+#ifdef LIBJPEG_PROGRESS_REPORT
   if (progress != NULL)
     progress->completed_extra_passes++;
 #endif
@@ -302,4 +302,4 @@ jinit_write_rle (j_decompress_ptr cinfo)
   return (djpeg_dest_ptr) dest;
 }
 
-#endif /* RLE_SUPPORTED */
+#endif /* LIBJPEG_RLE_SUPPORTED */

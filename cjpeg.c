@@ -9,7 +9,7 @@
  * It should work on any system with Unix- or MS-DOS-style command lines.
  *
  * Two different command line styles are permitted, depending on the
- * compile-time switch TWO_FILE_COMMANDLINE:
+ * compile-time switch LIBJPEG_TWO_FILE_COMMANDLINE:
  *	cjpeg [options]  inputfile outputfile
  *	cjpeg [options]  [inputfile]
  * In the second style, output is always to standard output, which you'd
@@ -82,7 +82,7 @@ select_file_type (j_compress_ptr cinfo, FILE * infile)
   int c;
 
   if (is_targa) {
-#ifdef TARGA_SUPPORTED
+#ifdef LIBJPEG_TARGA_SUPPORTED
     return jinit_read_targa(cinfo);
 #else
     ERREXIT(cinfo, JERR_TGA_NOTCOMP);
@@ -95,23 +95,23 @@ select_file_type (j_compress_ptr cinfo, FILE * infile)
     ERREXIT(cinfo, JERR_UNGETC_FAILED);
 
   switch (c) {
-#ifdef BMP_SUPPORTED
+#ifdef LIBJPEG_BMP_SUPPORTED
   case 'B':
     return jinit_read_bmp(cinfo);
 #endif
-#ifdef GIF_SUPPORTED
+#ifdef LIBJPEG_GIF_SUPPORTED
   case 'G':
     return jinit_read_gif(cinfo);
 #endif
-#ifdef PPM_SUPPORTED
+#ifdef LIBJPEG_PPM_SUPPORTED
   case 'P':
     return jinit_read_ppm(cinfo);
 #endif
-#ifdef RLE_SUPPORTED
+#ifdef LIBJPEG_RLE_SUPPORTED
   case 'R':
     return jinit_read_rle(cinfo);
 #endif
-#ifdef TARGA_SUPPORTED
+#ifdef LIBJPEG_TARGA_SUPPORTED
   case 0x00:
     return jinit_read_targa(cinfo);
 #endif
@@ -142,7 +142,7 @@ usage (void)
 /* complain about bad command line */
 {
   fprintf(stderr, "usage: %s [switches] ", progname);
-#ifdef TWO_FILE_COMMANDLINE
+#ifdef LIBJPEG_TWO_FILE_COMMANDLINE
   fprintf(stderr, "inputfile outputfile\n");
 #else
   fprintf(stderr, "[inputfile]\n");
@@ -157,7 +157,7 @@ usage (void)
 #ifdef C_PROGRESSIVE_SUPPORTED
   fprintf(stderr, "  -progressive   Create progressive JPEG file\n");
 #endif
-#ifdef TARGA_SUPPORTED
+#ifdef LIBJPEG_TARGA_SUPPORTED
   fprintf(stderr, "  -targa         Input file is Targa format (usually not needed)\n");
 #endif
   fprintf(stderr, "Switches for advanced users:\n");
@@ -462,7 +462,7 @@ main (int argc, char **argv)
 {
   struct jpeg_compress_struct cinfo;
   struct jpeg_error_mgr jerr;
-#ifdef PROGRESS_REPORT
+#ifdef LIBJPEG_PROGRESS_REPORT
   struct cdjpeg_progress_mgr progress;
 #endif
   int file_index;
@@ -510,7 +510,7 @@ main (int argc, char **argv)
 
   file_index = parse_switches(&cinfo, argc, argv, 0, FALSE);
 
-#ifdef TWO_FILE_COMMANDLINE
+#ifdef LIBJPEG_TWO_FILE_COMMANDLINE
   /* Must have either -outfile switch or explicit output file name */
   if (outfilename == NULL) {
     if (file_index != argc-2) {
@@ -532,7 +532,7 @@ main (int argc, char **argv)
     fprintf(stderr, "%s: only one input file\n", progname);
     usage();
   }
-#endif /* TWO_FILE_COMMANDLINE */
+#endif /* LIBJPEG_TWO_FILE_COMMANDLINE */
 
   /* Open the input file. */
   if (file_index < argc) {
@@ -556,7 +556,7 @@ main (int argc, char **argv)
     output_file = write_stdout();
   }
 
-#ifdef PROGRESS_REPORT
+#ifdef LIBJPEG_PROGRESS_REPORT
   start_progress_monitor((j_common_ptr) &cinfo, &progress);
 #endif
 
@@ -596,7 +596,7 @@ main (int argc, char **argv)
   if (output_file != stdout)
     fclose(output_file);
 
-#ifdef PROGRESS_REPORT
+#ifdef LIBJPEG_PROGRESS_REPORT
   end_progress_monitor((j_common_ptr) &cinfo);
 #endif
 

@@ -21,7 +21,7 @@
 
 #include "cdjpeg.h"		/* Common decls for cjpeg/djpeg applications */
 
-#ifdef GIF_SUPPORTED
+#ifdef LIBJPEG_GIF_SUPPORTED
 
 /*
  * The module selection routine for GIF format input.
@@ -35,4 +35,4 @@ jinit_read_gif (j_compress_ptr cinfo)
   return NULL;			/* keep compiler happy */
 }
 
-#endif /* GIF_SUPPORTED */
+#endif /* LIBJPEG_GIF_SUPPORTED */

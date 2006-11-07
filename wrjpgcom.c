@@ -34,7 +34,7 @@ extern void * malloc ();
 #endif
 #endif
 
-#ifdef DONT_USE_B_MODE		/* define mode parameters for fopen() */
+#ifdef LIBJPEG_DONT_USE_B_MODE		/* define mode parameters for fopen() */
 #define READ_BINARY	"r"
 #define WRITE_BINARY	"w"
 #else
@@ -355,7 +355,7 @@ usage (void)
   fprintf(stderr, "You can add to or replace any existing comment(s).\n");
 
   fprintf(stderr, "Usage: %s [switches] ", progname);
-#ifdef TWO_FILE_COMMANDLINE
+#ifdef LIBJPEG_TWO_FILE_COMMANDLINE
   fprintf(stderr, "inputfile outputfile\n");
 #else
   fprintf(stderr, "[inputfile]\n");
@@ -371,7 +371,7 @@ usage (void)
   fprintf(stderr, "then the comment text is read from standard input.\n");
   fprintf(stderr, "It can be multiple lines, up to %u characters total.\n",
 	  (unsigned int) MAX_COM_LENGTH);
-#ifndef TWO_FILE_COMMANDLINE
+#ifndef LIBJPEG_TWO_FILE_COMMANDLINE
   fprintf(stderr, "You must specify an input JPEG file name when supplying\n");
   fprintf(stderr, "comment text from standard input.\n");
 #endif
@@ -502,7 +502,7 @@ main (int argc, char **argv)
   }
 
   /* Open the output file. */
-#ifdef TWO_FILE_COMMANDLINE
+#ifdef LIBJPEG_TWO_FILE_COMMANDLINE
   /* Must have explicit output file name */
   if (argn != argc-2) {
     fprintf(stderr, "%s: must name one input and one output file\n",
@@ -531,7 +531,7 @@ main (int argc, char **argv)
 #else
   outfile = stdout;
 #endif
-#endif /* TWO_FILE_COMMANDLINE */
+#endif /* LIBJPEG_TWO_FILE_COMMANDLINE */
 
   /* Collect comment text from comment_file or stdin, if necessary */
   if (comment_arg == NULL) {

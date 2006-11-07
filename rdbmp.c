@@ -23,7 +23,7 @@
 
 #include "cdjpeg.h"		/* Common decls for cjpeg/djpeg applications */
 
-#ifdef BMP_SUPPORTED
+#ifdef LIBJPEG_BMP_SUPPORTED
 
 
 /* Macros to deal with unsigned chars as efficiently as compiler allows */
@@ -436,4 +436,4 @@ jinit_read_bmp (j_compress_ptr cinfo)
   return (cjpeg_source_ptr) source;
 }
 
-#endif /* BMP_SUPPORTED */
+#endif /* LIBJPEG_BMP_SUPPORTED */

@@ -364,20 +364,20 @@ int main (argc, argv)
 #endif
   fprintf(outfile, "\n#ifdef JPEG_INTERNALS\n\n");
   if (is_shifting_signed(-0x7F7E80B1L))
-    fprintf(outfile, "#undef RIGHT_SHIFT_IS_UNSIGNED\n");
+    fprintf(outfile, "#undef LIBJPEG_RIGHT_SHIFT_IS_UNSIGNED\n");
   else
-    fprintf(outfile, "#define RIGHT_SHIFT_IS_UNSIGNED\n");
+    fprintf(outfile, "#define LIBJPEG_RIGHT_SHIFT_IS_UNSIGNED\n");
   fprintf(outfile, "\n#endif /* JPEG_INTERNALS */\n");
   fprintf(outfile, "\n#ifdef JPEG_CJPEG_DJPEG\n\n");
-  fprintf(outfile, "#define BMP_SUPPORTED		/* BMP image file format */\n");
-  fprintf(outfile, "#define GIF_SUPPORTED		/* GIF image file format */\n");
-  fprintf(outfile, "#define PPM_SUPPORTED		/* PBMPLUS PPM/PGM image file format */\n");
-  fprintf(outfile, "#undef RLE_SUPPORTED		/* Utah RLE image file format */\n");
-  fprintf(outfile, "#define TARGA_SUPPORTED		/* Targa image file format */\n\n");
-  fprintf(outfile, "#undef TWO_FILE_COMMANDLINE	/* You may need this on non-Unix systems */\n");
+  fprintf(outfile, "#define LIBJPEG_BMP_SUPPORTED		/* BMP image file format */\n");
+  fprintf(outfile, "#define LIBJPEG_GIF_SUPPORTED		/* GIF image file format */\n");
+  fprintf(outfile, "#define LIBJPEG_PPM_SUPPORTED		/* PBMPLUS PPM/PGM image file format */\n");
+  fprintf(outfile, "#undef LIBJPEG_RLE_SUPPORTED		/* Utah RLE image file format */\n");
+  fprintf(outfile, "#define LIBJPEG_TARGA_SUPPORTED		/* Targa image file format */\n\n");
+  fprintf(outfile, "#undef LIBJPEG_TWO_FILE_COMMANDLINE	/* You may need this on non-Unix systems */\n");
   fprintf(outfile, "#undef LIBJPEG_NEED_SIGNAL_CATCHER	/* Define this if you use jmemname.c */\n");
-  fprintf(outfile, "#undef DONT_USE_B_MODE\n");
-  fprintf(outfile, "/* #define PROGRESS_REPORT */	/* optional */\n");
+  fprintf(outfile, "#undef LIBJPEG_DONT_USE_B_MODE\n");
+  fprintf(outfile, "/* #define LIBJPEG_PROGRESS_REPORT */	/* optional */\n");
   fprintf(outfile, "\n#endif /* JPEG_CJPEG_DJPEG */\n");
 
   /* Close the jconfig.h file */

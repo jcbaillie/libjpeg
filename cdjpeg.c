@@ -62,7 +62,7 @@ enable_signal_catcher (j_common_ptr cinfo)
  * Optional progress monitor: display a percent-done figure on stderr.
  */
 
-#ifdef PROGRESS_REPORT
+#ifdef LIBJPEG_PROGRESS_REPORT
 
 METHODDEF(void)
 progress_monitor (j_common_ptr cinfo)

@@ -32,7 +32,7 @@
 #endif
 #endif
 
-#ifdef DONT_USE_B_MODE		/* define mode parameters for fopen() */
+#ifdef LIBJPEG_DONT_USE_B_MODE		/* define mode parameters for fopen() */
 #define READ_BINARY	"r"
 #else
 #ifdef VMS			/* VMS is very nonstandard */

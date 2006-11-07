@@ -21,7 +21,7 @@ libjpeg_la_SOURCES += \
 libjpeg_la_LIBADD = \
 	$(SYSDEPMEM)
 libjpeg_la_DEPENDENCIES = \
-	$(SYSDEPMEM)
+	$(SYSDEPMEM) jconfig.h
 
 # memmgr back ends: compile only one of these into a working library
 SYSDEPSOURCES = jmemansi.c jmemname.c jmemnobs.c jmemdos.c jmemmac.c
@@ -36,6 +36,19 @@ SOURCES = $(LIBSOURCES) $(SYSDEPSOURCES) $(APPSOURCES)
 # files included by source files
 dist_include_HEADERS = jpeglib.h jmorecfg.h jerror.h
 nodist_include_HEADERS = jconfig.h
+
+# jconfig.h.  The technique comes from the handling of config.h by Automake.
+jconfig.h: jconfig.stamp
+	@if test ! -f $@; then \
+	  rm -f jconfig.stamp; \
+	  $(MAKE) $(AM_MAKEFLAGS) jconfig.stamp; \
+	else :; fi
+
+jconfig.stamp: $(srcdir)/config.hin $(top_builddir)/config.status
+	@rm -f $@
+	cd $(top_builddir) && $(SHELL) ./config.status jconfig.h
+	@touch $@
+
 
 # documentation, test, and support files
 DOCS = README install.doc usage.doc \

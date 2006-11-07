@@ -39,7 +39,7 @@
 
 #include "cdjpeg.h"		/* Common decls for cjpeg/djpeg applications */
 
-#ifdef GIF_SUPPORTED
+#ifdef LIBJPEG_GIF_SUPPORTED
 
 
 /* Private version of data destination object */
@@ -396,4 +396,4 @@ jinit_write_gif (j_decompress_ptr cinfo)
   return (djpeg_dest_ptr) dest;
 }
 
-#endif /* GIF_SUPPORTED */
+#endif /* LIBJPEG_GIF_SUPPORTED */

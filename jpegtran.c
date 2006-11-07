@@ -46,7 +46,7 @@ usage (void)
 /* complain about bad command line */
 {
   fprintf(stderr, "usage: %s [switches] ", progname);
-#ifdef TWO_FILE_COMMANDLINE
+#ifdef LIBJPEG_TWO_FILE_COMMANDLINE
   fprintf(stderr, "inputfile outputfile\n");
 #else
   fprintf(stderr, "[inputfile]\n");
@@ -359,7 +359,7 @@ main (int argc, char **argv)
   struct jpeg_decompress_struct srcinfo;
   struct jpeg_compress_struct dstinfo;
   struct jpeg_error_mgr jsrcerr, jdsterr;
-#ifdef PROGRESS_REPORT
+#ifdef LIBJPEG_PROGRESS_REPORT
   struct cdjpeg_progress_mgr progress;
 #endif
   jvirt_barray_ptr * src_coef_arrays;
@@ -405,7 +405,7 @@ main (int argc, char **argv)
   jsrcerr.trace_level = jdsterr.trace_level;
   srcinfo.mem->max_memory_to_use = dstinfo.mem->max_memory_to_use;
 
-#ifdef TWO_FILE_COMMANDLINE
+#ifdef LIBJPEG_TWO_FILE_COMMANDLINE
   /* Must have either -outfile switch or explicit output file name */
   if (outfilename == NULL) {
     if (file_index != argc-2) {
@@ -427,7 +427,7 @@ main (int argc, char **argv)
     fprintf(stderr, "%s: only one input file\n", progname);
     usage();
   }
-#endif /* TWO_FILE_COMMANDLINE */
+#endif /* LIBJPEG_TWO_FILE_COMMANDLINE */
 
   /* Open the input file. */
   if (file_index < argc) {
@@ -440,7 +440,7 @@ main (int argc, char **argv)
     fp = read_stdin();
   }
 
-#ifdef PROGRESS_REPORT
+#ifdef LIBJPEG_PROGRESS_REPORT
   start_progress_monitor((j_common_ptr) &dstinfo, &progress);
 #endif
 
@@ -536,7 +536,7 @@ main (int argc, char **argv)
   if (fp != stdout)
     fclose(fp);
 
-#ifdef PROGRESS_REPORT
+#ifdef LIBJPEG_PROGRESS_REPORT
   end_progress_monitor((j_common_ptr) &dstinfo);
 #endif
 

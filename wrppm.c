@@ -17,7 +17,7 @@
 
 #include "cdjpeg.h"		/* Common decls for cjpeg/djpeg applications */
 
-#ifdef PPM_SUPPORTED
+#ifdef LIBJPEG_PPM_SUPPORTED
 
 
 /*
@@ -265,4 +265,4 @@ jinit_write_ppm (j_decompress_ptr cinfo)
   return (djpeg_dest_ptr) dest;
 }
 
-#endif /* PPM_SUPPORTED */
+#endif /* LIBJPEG_PPM_SUPPORTED */

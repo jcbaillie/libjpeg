@@ -1,3 +1,22 @@
+2006-11-07  Akim Demaille  <demaille@gostai.com>
+
+	More adjustments to AX_PREFIX_CONFIG_H
+	* Makefile.am: Include explicit rules to create jconfig.h.
+	* wrtarga.c, configure.ac, jcphuff.c, wrjpgcom.c, jinclude.h,
+	* jpegint.h, rdrle.c, rdppm.c, ckconfig.c, rdtarga.c,
+	* install.doc, djpeg.c, wrrle.c, rdgif.c, cdjpeg.c, cdjpeg.h,
+	* rdbmp.c, wrppm.c, jidctfst.c, wrgif.c, usage.doc, wrbmp.c,
+	* jmemname.c, jmemdos.c, rdjpgcom.c, cderror.h, jpegtran.c,
+	* templates/jconfig.vms, templates/jconfig.st,
+	* templates/jconfig.bcc, templates/jconfig.dj,
+	* templates/jconfig.mac, templates/jconfig.manx,
+	* templates/jconfig.doc, templates/jconfig.vc,
+	* templates/jconfig.mc6, templates/jconfig.sas,
+	* templates/jconfig.wat, cjpeg.c (RIGHT_SHIFT_IS_UNSIGNED)
+	(BMP_SUPPORTED, GIF_SUPPORTED, PPM_SUPPORTED, RLS_SUPPORTED)
+	(TARGA_SUPPORTED, TWO_FILE_COMMANDLINE, DONT_USE_B_MODE)
+	(PROGRESS_REPORT): Now prefixed by LIBJPEG_. 
+
 2006-11-07  Akim Demaille  <akim.demaille@free.fr>
 
 	Use AX_PREFIX_CONFIG_H to avoid conflicts with other config.hs

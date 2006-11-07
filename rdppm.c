@@ -20,7 +20,7 @@
 
 #include "cdjpeg.h"		/* Common decls for cjpeg/djpeg applications */
 
-#ifdef PPM_SUPPORTED
+#ifdef LIBJPEG_PPM_SUPPORTED
 
 
 /* Portions of this code are based on the PBMPLUS library, which is:
@@ -455,4 +455,4 @@ jinit_read_ppm (j_compress_ptr cinfo)
   return (cjpeg_source_ptr) source;
 }
 
-#endif /* PPM_SUPPORTED */
+#endif /* LIBJPEG_PPM_SUPPORTED */

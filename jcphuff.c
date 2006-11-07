@@ -74,7 +74,7 @@ typedef phuff_entropy_encoder * phuff_entropy_ptr;
  * which should be safe.
  */
 
-#ifdef RIGHT_SHIFT_IS_UNSIGNED
+#ifdef LIBJPEG_RIGHT_SHIFT_IS_UNSIGNED
 #define ISHIFT_TEMPS	int ishift_temp;
 #define IRIGHT_SHIFT(x,shft)  \
 	((ishift_temp = (x)) < 0 ? \

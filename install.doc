@@ -227,7 +227,7 @@ fdopen() library routine or a Microsoft-compatible setmode() routine, you
 can safely use the Unix command line style, by defining USE_FDOPEN or
 USE_SETMODE respectively.)
 
-To use the two-file style, make jconfig.h say "#define TWO_FILE_COMMANDLINE".
+To use the two-file style, make jconfig.h say "#define LIBJPEG_TWO_FILE_COMMANDLINE".
 
 Selecting a memory manager
 --------------------------
@@ -344,7 +344,7 @@ configuration error is "ALIGN_TYPE is wrong, please fix": defining ALIGN_TYPE
 as long should take care of that one.
 
 If the cjpeg test run fails with "Missing Huffman code table entry", it's a
-good bet that you needed to define RIGHT_SHIFT_IS_UNSIGNED.  Go back to the
+good bet that you needed to define LIBJPEG_RIGHT_SHIFT_IS_UNSIGNED.  Go back to the
 configuration step and run ckconfig.c.  (This is a good plan for any other
 test failure, too.)
 
@@ -403,7 +403,7 @@ OPTIONAL STUFF
 
 Progress monitor:
 
-If you like, you can #define PROGRESS_REPORT (in jconfig.h) to enable display
+If you like, you can #define LIBJPEG_PROGRESS_REPORT (in jconfig.h) to enable display
 of percent-done progress reports.  The routine provided in cdjpeg.c merely
 prints percentages to stderr, but you can customize it to do something
 fancier.
@@ -414,7 +414,7 @@ We distribute the software with support for RLE image files (Utah Raster
 Toolkit format) disabled, because the RLE support won't compile without the
 Utah library.  If you have URT version 3.1 or later, you can enable RLE
 support as follows:
-	1.  #define RLE_SUPPORTED in jconfig.h.
+	1.  #define LIBJPEG_RLE_SUPPORTED in jconfig.h.
 	2.  Add a -I option to CFLAGS in the Makefile for the directory
 	    containing the URT .h files (typically the "include"
 	    subdirectory of the URT distribution).
@@ -429,7 +429,7 @@ this means 8 or 12 bits per channel, of course.)  If you need to work with
 deeper than 8-bit data, you can compile the IJG code for 12-bit operation.
 To do so:
   1. In jmorecfg.h, define BITS_IN_JSAMPLE as 12 rather than 8.
-  2. In jconfig.h, undefine BMP_SUPPORTED, RLE_SUPPORTED, and TARGA_SUPPORTED,
+  2. In jconfig.h, undefine LIBJPEG_BMP_SUPPORTED, LIBJPEG_RLE_SUPPORTED, and LIBJPEG_TARGA_SUPPORTED,
      because the code for those formats doesn't handle 12-bit data and won't
      even compile.  (The PPM code does work, as explained below.  The GIF
      code works too; it scales 8-bit GIF data to and from 12-bit depth
@@ -568,7 +568,7 @@ Also add a new line '.c.o:; $(cc) $< $(cflags) -c -o $@'.  Remove the
 lines '$(RM) libjpeg.o' and '$(AR2) libjpeg.o' and the 'jconfig.h'
 dependency section.
 
-Copy jconfig.doc to jconfig.h.  Edit jconfig.h to define TWO_FILE_COMMANDLINE
+Copy jconfig.doc to jconfig.h.  Edit jconfig.h to define LIBJPEG_TWO_FILE_COMMANDLINE
 and CHAR_IS_UNSIGNED.
 
 Run the makefile using !AMU not !Make.  If you want to use the 'clean' and
@@ -692,7 +692,7 @@ already clumps space requests.)
 Macintosh, Metrowerks CodeWarrior:
 
 The Unix-command-line-style interface can be used by defining USE_CCOMMAND.
-You'll also need to define TWO_FILE_COMMANDLINE to avoid stdin/stdout.
+You'll also need to define LIBJPEG_TWO_FILE_COMMANDLINE to avoid stdin/stdout.
 This means that when using the cjpeg/djpeg programs, you'll have to type the
 input and output file names in the "Arguments" text-edit box, rather than
 using the file radio buttons.  (Perhaps USE_FDOPEN or USE_SETMODE would
@@ -724,7 +724,7 @@ any of the supplied makefiles as a guide.  Also add the ANSI and Unix C
 libraries in a separate segment.  You may need to divide the JPEG files into
 more than one segment; we recommend dividing compression and decompression
 modules.  Define USE_CCOMMAND in jconfig.h so that the ccommand() routine is
-called.  You must also define TWO_FILE_COMMANDLINE because stdin/stdout
+called.  You must also define LIBJPEG_TWO_FILE_COMMANDLINE because stdin/stdout
 don't handle binary data correctly.
 
 On 680x0 Macs, Think C defines type "double" as a 12-byte IEEE extended float.
@@ -812,7 +812,7 @@ source files, sometimes it will give bogus compile errors.
 "Illegal character '#'" is the most common such error.  (This is true with
 Borland C 3.1, but perhaps is fixed in newer releases.)
 
-If you want one-file command line style, just undefine TWO_FILE_COMMANDLINE.
+If you want one-file command line style, just undefine LIBJPEG_TWO_FILE_COMMANDLINE.
 jconfig.bcc already includes #define USE_SETMODE to make this work.
 (fdopen does not work correctly.)
 
@@ -822,7 +822,7 @@ MS-DOS, Microsoft C:
 makefile.mc6 works with Microsoft C, DOS Visual C++, etc.  It should only
 be used if you want to build a 16-bit (small or medium memory model) program.
 
-If you want one-file command line style, just undefine TWO_FILE_COMMANDLINE.
+If you want one-file command line style, just undefine LIBJPEG_TWO_FILE_COMMANDLINE.
 jconfig.mc6 already includes #define USE_SETMODE to make this work.
 (fdopen does not work correctly.)
 

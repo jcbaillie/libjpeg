@@ -48,7 +48,7 @@ or
 i.e., both the input and output files are named on the command line.  This
 style is a little more foolproof, and it loses no functionality if you don't
 have pipes.  (You can get this style on Unix too, if you prefer, by defining
-TWO_FILE_COMMANDLINE when you compile the programs; see install.doc.)
+LIBJPEG_TWO_FILE_COMMANDLINE when you compile the programs; see install.doc.)
 
 You can also say:
 	cjpeg [switches] -outfile jpegfile  imagefile

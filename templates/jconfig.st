@@ -17,7 +17,7 @@
 
 #ifdef JPEG_INTERNALS
 
-#undef RIGHT_SHIFT_IS_UNSIGNED
+#undef LIBJPEG_RIGHT_SHIFT_IS_UNSIGNED
 
 #define ALIGN_TYPE  long	/* apparently double is a weird size? */
 
@@ -25,18 +25,18 @@
 
 #ifdef JPEG_CJPEG_DJPEG
 
-#define BMP_SUPPORTED		/* BMP image file format */
-#define GIF_SUPPORTED		/* GIF image file format */
-#define PPM_SUPPORTED		/* PBMPLUS PPM/PGM image file format */
-#undef RLE_SUPPORTED		/* Utah RLE image file format */
-#define TARGA_SUPPORTED		/* Targa image file format */
+#define LIBJPEG_BMP_SUPPORTED		/* BMP image file format */
+#define LIBJPEG_GIF_SUPPORTED		/* GIF image file format */
+#define LIBJPEG_PPM_SUPPORTED		/* PBMPLUS PPM/PGM image file format */
+#undef LIBJPEG_RLE_SUPPORTED		/* Utah RLE image file format */
+#define LIBJPEG_TARGA_SUPPORTED		/* Targa image file format */
 
-#define TWO_FILE_COMMANDLINE	/* optional -- undef if you like Unix style */
-/* Note: if you undef TWO_FILE_COMMANDLINE, you may need to define
+#define LIBJPEG_TWO_FILE_COMMANDLINE	/* optional -- undef if you like Unix style */
+/* Note: if you undef LIBJPEG_TWO_FILE_COMMANDLINE, you may need to define
  * USE_SETMODE.  Some Atari compilers require it, some do not.
  */
 #define LIBJPEG_NEED_SIGNAL_CATCHER	/* needed if you use jmemname.c */
-#undef DONT_USE_B_MODE
-#undef PROGRESS_REPORT		/* optional */
+#undef LIBJPEG_DONT_USE_B_MODE
+#undef LIBJPEG_PROGRESS_REPORT		/* optional */
 
 #endif /* JPEG_CJPEG_DJPEG */

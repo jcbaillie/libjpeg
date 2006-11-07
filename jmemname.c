@@ -26,7 +26,7 @@ extern void free JPP((void *ptr));
 #define SEEK_SET  0		/* if not, assume 0 is correct */
 #endif
 
-#ifdef DONT_USE_B_MODE		/* define mode parameters for fopen() */
+#ifdef LIBJPEG_DONT_USE_B_MODE		/* define mode parameters for fopen() */
 #define READ_BINARY	"r"
 #define RW_BINARY	"w+"
 #else

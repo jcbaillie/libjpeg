@@ -19,7 +19,7 @@
 
 #include "cdjpeg.h"		/* Common decls for cjpeg/djpeg applications */
 
-#ifdef TARGA_SUPPORTED
+#ifdef LIBJPEG_TARGA_SUPPORTED
 
 
 /* Macros to deal with unsigned chars as efficiently as compiler allows */
@@ -497,4 +497,4 @@ jinit_read_targa (j_compress_ptr cinfo)
   return (cjpeg_source_ptr) source;
 }
 
-#endif /* TARGA_SUPPORTED */
+#endif /* LIBJPEG_TARGA_SUPPORTED */

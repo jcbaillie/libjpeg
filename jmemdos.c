@@ -71,7 +71,7 @@ extern char * getenv JPP((const char * name));
 
 #endif /* LIBJPEG_NEED_FAR_POINTERS */
 
-#ifdef DONT_USE_B_MODE		/* define mode parameters for fopen() */
+#ifdef LIBJPEG_DONT_USE_B_MODE		/* define mode parameters for fopen() */
 #define READ_BINARY	"r"
 #else
 #define READ_BINARY	"rb"
