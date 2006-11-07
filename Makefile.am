@@ -48,6 +48,7 @@ jconfig.stamp: $(srcdir)/config.hin $(top_builddir)/config.status
 	@rm -f $@
 	cd $(top_builddir) && $(SHELL) ./config.status jconfig.h
 	@touch $@
+CLEANFILES = _configs.sed jconfig.h jconfig.stamp
 
 
 # documentation, test, and support files
@@ -113,7 +114,7 @@ check-local: cjpeg djpeg jpegtran
 	cmp $(srcdir)/testimg.ppm testoutp.ppm
 	cmp $(srcdir)/testimgp.jpg testoutp.jpg
 	cmp $(srcdir)/testorig.jpg testoutt.jpg
-CLEANFILES = testout*
+CLEANFILES += testout*
 else
 EXTRA_PROGRAMS = $(jpeg_programs)
 endif

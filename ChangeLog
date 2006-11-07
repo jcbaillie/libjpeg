@@ -1,5 +1,10 @@
 2006-11-07  Akim Demaille  <demaille@gostai.com>
 
+	distcheck fixes
+	* Makefile.am (CLEANFILES): Remove jconfig.h related files.
+
+2006-11-07  Akim Demaille  <demaille@gostai.com>
+
 	More adjustments to AX_PREFIX_CONFIG_H
 	* Makefile.am: Include explicit rules to create jconfig.h.
 	* wrtarga.c, configure.ac, jcphuff.c, wrjpgcom.c, jinclude.h,
