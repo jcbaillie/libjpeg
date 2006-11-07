@@ -2870,7 +2870,7 @@ and GIF file formats; you must disable the other file formats to compile a
 12-bit cjpeg or djpeg.  (install.doc has more information about that.)
 At present, a 12-bit library can handle *only* 12-bit images, not both
 precisions.  (If you need to include both 8- and 12-bit libraries in a single
-application, you could probably do it by defining NEED_SHORT_EXTERNAL_NAMES
+application, you could probably do it by defining LIBJPEG_NEED_SHORT_EXTERNAL_NAMES
 for just one of the copies.  You'd have to access the 8-bit and 12-bit copies
 from separate application source files.  This is untested ... if you try it,
 we'd like to hear whether it works!)
@@ -2957,7 +2957,7 @@ replacing that one file.
 
 The code generally assumes that C names must be unique in the first 15
 characters.  However, global function names can be made unique in the
-first 6 characters by defining NEED_SHORT_EXTERNAL_NAMES.
+first 6 characters by defining LIBJPEG_NEED_SHORT_EXTERNAL_NAMES.
 
 More info about porting the code may be gleaned by reading jconfig.doc,
 jmorecfg.h, and jinclude.h.

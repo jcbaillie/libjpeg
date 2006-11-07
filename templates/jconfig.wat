@@ -1,18 +1,18 @@
 /* jconfig.wat --- jconfig.h for Watcom C/C++ on MS-DOS or OS/2. */
 /* see jconfig.doc for explanations */
 
-#define HAVE_PROTOTYPES
-#define HAVE_UNSIGNED_CHAR
-#define HAVE_UNSIGNED_SHORT
+#define LIBJPEG_HAVE_PROTOTYPES
+#define LIBJPEG_HAVE_UNSIGNED_CHAR
+#define LIBJPEG_HAVE_UNSIGNED_SHORT
 /* #define void char */
 /* #define const */
 #define CHAR_IS_UNSIGNED
-#define HAVE_STDDEF_H
-#define HAVE_STDLIB_H
-#undef NEED_BSD_STRINGS
-#undef NEED_SYS_TYPES_H
-#undef NEED_FAR_POINTERS	/* Watcom uses flat 32-bit addressing */
-#undef NEED_SHORT_EXTERNAL_NAMES
+#define LIBJPEG_HAVE_STDDEF_H
+#define LIBJPEG_HAVE_STDLIB_H
+#undef LIBJPEG_NEED_BSD_STRINGS
+#undef LIBJPEG_NEED_SYS_TYPES_H
+#undef LIBJPEG_NEED_FAR_POINTERS	/* Watcom uses flat 32-bit addressing */
+#undef LIBJPEG_NEED_SHORT_EXTERNAL_NAMES
 #undef INCOMPLETE_TYPES_BROKEN
 
 #ifdef JPEG_INTERNALS
@@ -31,7 +31,7 @@
 
 #undef TWO_FILE_COMMANDLINE	/* optional */
 #define USE_SETMODE		/* Needed to make one-file style work in Watcom */
-#undef NEED_SIGNAL_CATCHER	/* Define this if you use jmemname.c */
+#undef LIBJPEG_NEED_SIGNAL_CATCHER	/* Define this if you use jmemname.c */
 #undef DONT_USE_B_MODE
 #undef PROGRESS_REPORT		/* optional */
 

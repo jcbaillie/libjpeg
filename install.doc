@@ -184,7 +184,7 @@ uses as the standard makefile name).  The most generic makefiles we provide
 are
 	makefile.ansi:	if your C compiler supports function prototypes
 	makefile.unix:	if not.
-(You have function prototypes if ckconfig.c put "#define PROTOTYPES"
+(You have function prototypes if ckconfig.c put "#define LIBJPEG_PROTOTYPES"
 in jconfig.h.)  You may want to start from one of the other makefiles if
 there is one for a system similar to yours.
 
@@ -246,7 +246,7 @@ memory managers:
 		except a Unix machine, you'll need to configure the
 		select_file_name() routine appropriately; see the comments
 		near the head of jmemname.c.  If you use this version, define
-		NEED_SIGNAL_CATCHER in jconfig.h to make sure the temp files
+		LIBJPEG_NEED_SIGNAL_CATCHER in jconfig.h to make sure the temp files
 		are removed if the program is aborted.
 
 * jmemnobs.c	(That stands for No Backing Store :-).)  This will compile on
@@ -751,10 +751,10 @@ compile cjpeg or djpeg by itself, but you will probably have to use medium
 model for any larger application.  This won't make much difference in
 performance.  You *will* take a noticeable performance hit if you use a
 large-data memory model, and you should avoid "huge" model if at all
-possible.  Be sure that NEED_FAR_POINTERS is defined in jconfig.h if you use
+possible.  Be sure that LIBJPEG_NEED_FAR_POINTERS is defined in jconfig.h if you use
 a small-data memory model; be sure it is NOT defined if you use a large-data
 model.  (The supplied makefiles and jconfig files for Borland and Microsoft C
-compile in medium model and define NEED_FAR_POINTERS.)
+compile in medium model and define LIBJPEG_NEED_FAR_POINTERS.)
 
 The DOS-specific memory manager, jmemdos.c, should be used if possible.
 It needs some assembly-code routines which are in jmemdosa.asm; make sure
@@ -796,7 +796,7 @@ None of the above comments about memory models apply if you are using a
 32-bit flat-memory-space environment, such as DJGPP or Watcom C.  (And you
 should use one if you have it, as performance will be much better than
 8086-compatible code!)  For flat-memory-space compilers, do NOT define
-NEED_FAR_POINTERS, and do NOT use jmemdos.c.  Use jmemnobs.c if the
+LIBJPEG_NEED_FAR_POINTERS, and do NOT use jmemdos.c.  Use jmemnobs.c if the
 environment supplies adequate virtual memory, otherwise use jmemansi.c or
 jmemname.c.
 
@@ -862,7 +862,7 @@ add something like this to your jconfig.h file:
 	#ifndef __RPCNDR_H__	/* don't conflict if rpcndr.h already read */
 	typedef unsigned char boolean;
 	#endif
-	#define HAVE_BOOLEAN	/* prevent jmorecfg.h from redefining it */
+	#define LIBJPEG_HAVE_BOOLEAN	/* prevent jmorecfg.h from redefining it */
 (This is already in jconfig.vc, by the way.)
 
 windef.h contains the declarations
@@ -965,7 +965,7 @@ Microsoft Windows, Borland C:
 
 The provided jconfig.bcc should work OK in a 32-bit Windows environment,
 but you'll need to tweak it in a 16-bit environment (you'd need to define
-NEED_FAR_POINTERS and MAX_ALLOC_CHUNK).  Beware that makefile.bcc will need
+LIBJPEG_NEED_FAR_POINTERS and MAX_ALLOC_CHUNK).  Beware that makefile.bcc will need
 alteration if you want to use it for Windows --- in particular, you should
 use jmemnobs.c not jmemdos.c under Windows.
 

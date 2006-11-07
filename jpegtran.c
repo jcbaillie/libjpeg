@@ -389,7 +389,7 @@ main (int argc, char **argv)
   /* Now safe to enable signal catcher.
    * Note: we assume only the decompression object will have virtual arrays.
    */
-#ifdef NEED_SIGNAL_CATCHER
+#ifdef LIBJPEG_NEED_SIGNAL_CATCHER
   enable_signal_catcher((j_common_ptr) &srcinfo);
 #endif
 

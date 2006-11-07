@@ -11,7 +11,7 @@
 
 #include "cdjpeg.h"		/* Common decls for cjpeg/djpeg applications */
 #include <ctype.h>		/* to declare isupper(), tolower() */
-#ifdef NEED_SIGNAL_CATCHER
+#ifdef LIBJPEG_NEED_SIGNAL_CATCHER
 #include <signal.h>		/* to declare signal() */
 #endif
 #ifdef USE_SETMODE
@@ -27,7 +27,7 @@
  * we put "#define signal_catcher _abort" in jconfig.h.  Talk about bogus...
  */
 
-#ifdef NEED_SIGNAL_CATCHER
+#ifdef LIBJPEG_NEED_SIGNAL_CATCHER
 
 static j_common_ptr sig_cinfo;
 

@@ -12,11 +12,11 @@
 
 /* Short forms of external names for systems with brain-damaged linkers. */
 
-#ifdef NEED_SHORT_EXTERNAL_NAMES
+#ifdef LIBJPEG_NEED_SHORT_EXTERNAL_NAMES
 #define jpeg_make_d_derived_tbl	jMkDDerived
 #define jpeg_fill_bit_buffer	jFilBitBuf
 #define jpeg_huff_decode	jHufDecode
-#endif /* NEED_SHORT_EXTERNAL_NAMES */
+#endif /* LIBJPEG_NEED_SHORT_EXTERNAL_NAMES */
 
 
 /* Derived data constructed for each Huffman table */

@@ -54,12 +54,12 @@
  * You can use a signed char by having GETJSAMPLE mask it with 0xFF.
  */
 
-#ifdef HAVE_UNSIGNED_CHAR
+#ifdef LIBJPEG_HAVE_UNSIGNED_CHAR
 
 typedef unsigned char JSAMPLE;
 #define GETJSAMPLE(value)  ((int) (value))
 
-#else /* not HAVE_UNSIGNED_CHAR */
+#else /* not LIBJPEG_HAVE_UNSIGNED_CHAR */
 
 typedef char JSAMPLE;
 #ifdef CHAR_IS_UNSIGNED
@@ -68,7 +68,7 @@ typedef char JSAMPLE;
 #define GETJSAMPLE(value)  ((int) (value) & 0xFF)
 #endif /* CHAR_IS_UNSIGNED */
 
-#endif /* HAVE_UNSIGNED_CHAR */
+#endif /* LIBJPEG_HAVE_UNSIGNED_CHAR */
 
 #define MAXJSAMPLE	255
 #define CENTERJSAMPLE	128
@@ -105,12 +105,12 @@ typedef short JCOEF;
  * managers, this is also the data type passed to fread/fwrite.
  */
 
-#ifdef HAVE_UNSIGNED_CHAR
+#ifdef LIBJPEG_HAVE_UNSIGNED_CHAR
 
 typedef unsigned char JOCTET;
 #define GETJOCTET(value)  (value)
 
-#else /* not HAVE_UNSIGNED_CHAR */
+#else /* not LIBJPEG_HAVE_UNSIGNED_CHAR */
 
 typedef char JOCTET;
 #ifdef CHAR_IS_UNSIGNED
@@ -119,7 +119,7 @@ typedef char JOCTET;
 #define GETJOCTET(value)  ((value) & 0xFF)
 #endif /* CHAR_IS_UNSIGNED */
 
-#endif /* HAVE_UNSIGNED_CHAR */
+#endif /* LIBJPEG_HAVE_UNSIGNED_CHAR */
 
 
 /* These typedefs are used for various table entries and so forth.
@@ -131,23 +131,23 @@ typedef char JOCTET;
 
 /* UINT8 must hold at least the values 0..255. */
 
-#ifdef HAVE_UNSIGNED_CHAR
+#ifdef LIBJPEG_HAVE_UNSIGNED_CHAR
 typedef unsigned char UINT8;
-#else /* not HAVE_UNSIGNED_CHAR */
+#else /* not LIBJPEG_HAVE_UNSIGNED_CHAR */
 #ifdef CHAR_IS_UNSIGNED
 typedef char UINT8;
 #else /* not CHAR_IS_UNSIGNED */
 typedef short UINT8;
 #endif /* CHAR_IS_UNSIGNED */
-#endif /* HAVE_UNSIGNED_CHAR */
+#endif /* LIBJPEG_HAVE_UNSIGNED_CHAR */
 
 /* UINT16 must hold at least the values 0..65535. */
 
-#ifdef HAVE_UNSIGNED_SHORT
+#ifdef LIBJPEG_HAVE_UNSIGNED_SHORT
 typedef unsigned short UINT16;
-#else /* not HAVE_UNSIGNED_SHORT */
+#else /* not LIBJPEG_HAVE_UNSIGNED_SHORT */
 typedef unsigned int UINT16;
-#endif /* HAVE_UNSIGNED_SHORT */
+#endif /* LIBJPEG_HAVE_UNSIGNED_SHORT */
 
 /* INT16 must hold at least the values -32768..32767. */
 
@@ -196,7 +196,7 @@ typedef unsigned int JDIMENSION;
  * Again, you can customize this if you need special linkage keywords.
  */
 
-#ifdef PROTOTYPES
+#ifdef LIBJPEG_PROTOTYPES
 #define JMETHOD(type,methodname,arglist)  type (*methodname) arglist
 #else
 #define JMETHOD(type,methodname,arglist)  type (*methodname) ()
@@ -206,10 +206,10 @@ typedef unsigned int JDIMENSION;
 /* Here is the pseudo-keyword for declaring pointers that must be "far"
  * on 80x86 machines.  Most of the specialized coding for 80x86 is handled
  * by just saying "FAR *" where such a pointer is needed.  In a few places
- * explicit coding is needed; see uses of the NEED_FAR_POINTERS symbol.
+ * explicit coding is needed; see uses of the LIBJPEG_NEED_FAR_POINTERS symbol.
  */
 
-#ifdef NEED_FAR_POINTERS
+#ifdef LIBJPEG_NEED_FAR_POINTERS
 #define FAR  far
 #else
 #define FAR
@@ -220,10 +220,10 @@ typedef unsigned int JDIMENSION;
  * On a few systems, type boolean and/or its values FALSE, TRUE may appear
  * in standard header files.  Or you may have conflicts with application-
  * specific header files that you want to include together with these files.
- * Defining HAVE_BOOLEAN before including jpeglib.h should make it work.
+ * Defining LIBJPEG_HAVE_BOOLEAN before including jpeglib.h should make it work.
  */
 
-#ifndef HAVE_BOOLEAN
+#ifndef LIBJPEG_HAVE_BOOLEAN
 typedef int boolean;
 #endif
 #ifndef FALSE			/* in case these macros already exist */
@@ -353,7 +353,7 @@ typedef int boolean;
  */
 
 #ifndef FAST_FLOAT
-#ifdef PROTOTYPES
+#ifdef LIBJPEG_PROTOTYPES
 #define FAST_FLOAT  float
 #else
 #define FAST_FLOAT  double

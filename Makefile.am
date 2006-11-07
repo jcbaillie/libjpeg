@@ -1,9 +1,7 @@
 # Makefile for Independent JPEG Group's software
 
-# This makefile is suitable for Unix-like systems with non-ANSI compilers.
-# If you have an ANSI compiler, makefile.ansi is a better starting point.
-
-# Read installation instructions before saying "make" !!
+# That's where aclocal extensions are.
+ACLOCAL_AMFLAGS = -I build-aux
 
 # source files: JPEG library proper
 lib_LTLIBRARIES = libjpeg.la

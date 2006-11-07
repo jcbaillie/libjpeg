@@ -41,7 +41,7 @@
  * want to refer to it directly.
  */
 
-#ifdef NEED_SHORT_EXTERNAL_NAMES
+#ifdef LIBJPEG_NEED_SHORT_EXTERNAL_NAMES
 #define jpeg_std_message_table	jMsgTable
 #endif
 

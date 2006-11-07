@@ -17,7 +17,7 @@
 #include "jpeglib.h"
 #include "jmemsys.h"		/* import the system-dependent declarations */
 
-#ifndef HAVE_STDLIB_H		/* <stdlib.h> should declare malloc(),free() */
+#ifndef LIBJPEG_HAVE_STDLIB_H		/* <stdlib.h> should declare malloc(),free() */
 extern void * malloc JPP((size_t size));
 extern void free JPP((void *ptr));
 #endif
@@ -62,7 +62,7 @@ extern void free JPP((void *ptr));
  *      doesn't have mktemp(), define NO_MKTEMP to do it the hard way.
  *      (If you don't have <errno.h>, also define NO_ERRNO_H.)
  *
- *  4.  You probably want to define NEED_SIGNAL_CATCHER so that cjpeg.c/djpeg.c
+ *  4.  You probably want to define LIBJPEG_NEED_SIGNAL_CATCHER so that cjpeg.c/djpeg.c
  *      will cause the temp files to be removed if you stop the program early.
  */
 

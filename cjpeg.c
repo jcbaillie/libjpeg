@@ -489,7 +489,7 @@ main (int argc, char **argv)
   jerr.last_addon_message = JMSG_LASTADDONCODE;
 
   /* Now safe to enable signal catcher. */
-#ifdef NEED_SIGNAL_CATCHER
+#ifdef LIBJPEG_NEED_SIGNAL_CATCHER
   enable_signal_catcher((j_common_ptr) &cinfo);
 #endif
 

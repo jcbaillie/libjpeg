@@ -293,7 +293,7 @@ struct jpeg_color_quantizer {
 
 /* Short forms of external names for systems with brain-damaged linkers. */
 
-#ifdef NEED_SHORT_EXTERNAL_NAMES
+#ifdef LIBJPEG_NEED_SHORT_EXTERNAL_NAMES
 #define jinit_compress_master	jICompress
 #define jinit_c_master_control	jICMaster
 #define jinit_c_main_controller	jICMainC
@@ -327,7 +327,7 @@ struct jpeg_color_quantizer {
 #define jzero_far		jZeroFar
 #define jpeg_zigzag_order	jZIGTable
 #define jpeg_natural_order	jZAGTable
-#endif /* NEED_SHORT_EXTERNAL_NAMES */
+#endif /* LIBJPEG_NEED_SHORT_EXTERNAL_NAMES */
 
 
 /* Compression module initialization routines */

@@ -21,7 +21,7 @@
 
 /* Short forms of external names for systems with brain-damaged linkers. */
 
-#ifdef NEED_SHORT_EXTERNAL_NAMES
+#ifdef LIBJPEG_NEED_SHORT_EXTERNAL_NAMES
 #define jpeg_get_small		jGetSmall
 #define jpeg_free_small		jFreeSmall
 #define jpeg_get_large		jGetLarge
@@ -30,7 +30,7 @@
 #define jpeg_open_backing_store	jOpenBackStore
 #define jpeg_mem_init		jMemInit
 #define jpeg_mem_term		jMemTerm
-#endif /* NEED_SHORT_EXTERNAL_NAMES */
+#endif /* LIBJPEG_NEED_SHORT_EXTERNAL_NAMES */
 
 
 /*

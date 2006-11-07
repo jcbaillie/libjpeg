@@ -1,18 +1,18 @@
 /* jconfig.st --- jconfig.h for Atari ST/STE/TT using Pure C or Turbo C. */
 /* see jconfig.doc for explanations */
 
-#define HAVE_PROTOTYPES
-#define HAVE_UNSIGNED_CHAR
-#define HAVE_UNSIGNED_SHORT
+#define LIBJPEG_HAVE_PROTOTYPES
+#define LIBJPEG_HAVE_UNSIGNED_CHAR
+#define LIBJPEG_HAVE_UNSIGNED_SHORT
 /* #define void char */
 /* #define const */
 #undef CHAR_IS_UNSIGNED
-#define HAVE_STDDEF_H
-#define HAVE_STDLIB_H
-#undef NEED_BSD_STRINGS
-#undef NEED_SYS_TYPES_H
-#undef NEED_FAR_POINTERS
-#undef NEED_SHORT_EXTERNAL_NAMES
+#define LIBJPEG_HAVE_STDDEF_H
+#define LIBJPEG_HAVE_STDLIB_H
+#undef LIBJPEG_NEED_BSD_STRINGS
+#undef LIBJPEG_NEED_SYS_TYPES_H
+#undef LIBJPEG_NEED_FAR_POINTERS
+#undef LIBJPEG_NEED_SHORT_EXTERNAL_NAMES
 #define INCOMPLETE_TYPES_BROKEN	/* suppress undefined-structure warnings */
 
 #ifdef JPEG_INTERNALS
@@ -35,7 +35,7 @@
 /* Note: if you undef TWO_FILE_COMMANDLINE, you may need to define
  * USE_SETMODE.  Some Atari compilers require it, some do not.
  */
-#define NEED_SIGNAL_CATCHER	/* needed if you use jmemname.c */
+#define LIBJPEG_NEED_SIGNAL_CATCHER	/* needed if you use jmemname.c */
 #undef DONT_USE_B_MODE
 #undef PROGRESS_REPORT		/* optional */
 

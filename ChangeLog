@@ -1,5 +1,28 @@
 2006-11-07  Akim Demaille  <akim.demaille@free.fr>
 
+	Use AX_PREFIX_CONFIG_H to avoid conflicts with other config.hs
+	* Makefile.am (ACLOCAL_AMFLAGS): New.
+	* build-aux/ax-prefix-config-h.m4: New.
+	* configure.ac (AC_CONFIG_HEADERS): Create config.h, not jconfig.h.
+	(AX_PREFIX_CONFIG_H): Use it to create jconfig.h.
+	* jconfig.hin: Remove.
+	* jmemansi.c, coderules.doc, jchuff.h, transupp.c,
+	* transupp.h, wrjpgcom.c, jmemmgr.c, jmorecfg.h,
+	* jinclude.h, jpegint.h, ChangeLog, jutils.c, jpeglib.h,
+	* rdppm.c, ckconfig.c, rdtarga.c, djpeg.c, install.doc,
+	* jmemsys.h, cdjpeg.c, cdjpeg.h, jerror.c, rdbmp.c,
+	* jmemnobs.c, jdhuff.h, jmemname.c, jdct.h, jmemdos.c,
+	* libjpeg.doc, jpegtran.c, templates/jconfig.vms,
+	* templates/jconfig.st, templates/jconfig.bcc,
+	* templates/jconfig.dj, templates/jconfig.mac,
+	* templates/jconfig.manx, templates/jconfig.doc,
+	* templates/jconfig.vc, templates/jconfig.mc6,
+	* templates/jconfig.sas, templates/jconfig.wat, cjpeg.c:
+	Adjust to the renaming of cpp symbols:
+	HAVE_* and NEED_* are now LIBJPEG_HAVE_* etc.
+
+2006-11-07  Akim Demaille  <akim.demaille@free.fr>
+
 	Upgrade from Automake 1.10.
 	* build-aux/install-sh, build-aux/missing: Upgrade.
 

@@ -818,7 +818,7 @@ typedef JMETHOD(boolean, jpeg_marker_parser_method, (j_decompress_ptr cinfo));
  * Note JPP requires double parentheses.
  */
 
-#ifdef PROTOTYPES
+#ifdef LIBJPEG_PROTOTYPES
 #define JPP(arglist)	arglist
 #else
 #define JPP(arglist)	()
@@ -832,7 +832,7 @@ typedef JMETHOD(boolean, jpeg_marker_parser_method, (j_decompress_ptr cinfo));
  * characters, you are out of luck.  Get a better compiler.)
  */
 
-#ifdef NEED_SHORT_EXTERNAL_NAMES
+#ifdef LIBJPEG_NEED_SHORT_EXTERNAL_NAMES
 #define jpeg_std_error		jStdError
 #define jpeg_CreateCompress	jCreaCompress
 #define jpeg_CreateDecompress	jCreaDecompress
@@ -881,7 +881,7 @@ typedef JMETHOD(boolean, jpeg_marker_parser_method, (j_decompress_ptr cinfo));
 #define jpeg_abort		jAbort
 #define jpeg_destroy		jDestroy
 #define jpeg_resync_to_restart	jResyncRestart
-#endif /* NEED_SHORT_EXTERNAL_NAMES */
+#endif /* LIBJPEG_NEED_SHORT_EXTERNAL_NAMES */
 
 
 /* Default error-management setup */

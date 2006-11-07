@@ -96,7 +96,7 @@ jround_up (long a, long b)
  * is not all that great, because these routines aren't very heavily used.)
  */
 
-#ifndef NEED_FAR_POINTERS	/* normal case, same as regular macros */
+#ifndef LIBJPEG_NEED_FAR_POINTERS	/* normal case, same as regular macros */
 #define FMEMCOPY(dest,src,size)	MEMCOPY(dest,src,size)
 #define FMEMZERO(target,size)	MEMZERO(target,size)
 #else				/* 80x86 case, define if we can */

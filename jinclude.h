@@ -31,15 +31,15 @@
  * You can remove those references if you want to compile without <stdio.h>.
  */
 
-#ifdef HAVE_STDDEF_H
+#ifdef LIBJPEG_HAVE_STDDEF_H
 #include <stddef.h>
 #endif
 
-#ifdef HAVE_STDLIB_H
+#ifdef LIBJPEG_HAVE_STDLIB_H
 #include <stdlib.h>
 #endif
 
-#ifdef NEED_SYS_TYPES_H
+#ifdef LIBJPEG_NEED_SYS_TYPES_H
 #include <sys/types.h>
 #endif
 
@@ -55,7 +55,7 @@
  * Change the casts in these macros if not!
  */
 
-#ifdef NEED_BSD_STRINGS
+#ifdef LIBJPEG_NEED_BSD_STRINGS
 
 #include <strings.h>
 #define MEMZERO(target,size)	bzero((void *)(target), (size_t)(size))

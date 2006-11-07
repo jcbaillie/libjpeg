@@ -1,18 +1,18 @@
 /* jconfig.vms --- jconfig.h for use on Digital VMS. */
 /* see jconfig.doc for explanations */
 
-#define HAVE_PROTOTYPES
-#define HAVE_UNSIGNED_CHAR
-#define HAVE_UNSIGNED_SHORT
+#define LIBJPEG_HAVE_PROTOTYPES
+#define LIBJPEG_HAVE_UNSIGNED_CHAR
+#define LIBJPEG_HAVE_UNSIGNED_SHORT
 /* #define void char */
 /* #define const */
 #undef CHAR_IS_UNSIGNED
-#define HAVE_STDDEF_H
-#define HAVE_STDLIB_H
-#undef NEED_BSD_STRINGS
-#undef NEED_SYS_TYPES_H
-#undef NEED_FAR_POINTERS
-#undef NEED_SHORT_EXTERNAL_NAMES
+#define LIBJPEG_HAVE_STDDEF_H
+#define LIBJPEG_HAVE_STDLIB_H
+#undef LIBJPEG_NEED_BSD_STRINGS
+#undef LIBJPEG_NEED_SYS_TYPES_H
+#undef LIBJPEG_NEED_FAR_POINTERS
+#undef LIBJPEG_NEED_SHORT_EXTERNAL_NAMES
 #undef INCOMPLETE_TYPES_BROKEN
 
 #ifdef JPEG_INTERNALS
@@ -30,7 +30,7 @@
 #define TARGA_SUPPORTED		/* Targa image file format */
 
 #define TWO_FILE_COMMANDLINE	/* Needed on VMS */
-#undef NEED_SIGNAL_CATCHER
+#undef LIBJPEG_NEED_SIGNAL_CATCHER
 #undef DONT_USE_B_MODE
 #undef PROGRESS_REPORT		/* optional */
 

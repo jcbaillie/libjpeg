@@ -1,3 +1,5 @@
+m4_pattern_forbid([^AX_])
+
 AC_INIT([libjpeg], [6b])
 AC_CONFIG_AUX_DIR([build-aux])
 
@@ -116,7 +118,8 @@ AC_SUBST([SYSDEPMEM])
 
 AC_PROG_LIBTOOL
 
-AC_CONFIG_HEADERS([jconfig.h:jconfig.hin])
+AC_CONFIG_HEADERS([config.h:config.hin])
+AX_PREFIX_CONFIG_H([jconfig.h])
 AC_CONFIG_FILES([Makefile])
 
 AC_OUTPUT

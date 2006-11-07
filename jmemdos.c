@@ -9,7 +9,7 @@
  * dependent portion of the JPEG memory manager.  Temporary data can be
  * stored in extended or expanded memory as well as in regular DOS files.
  *
- * If you use this file, you must be sure that NEED_FAR_POINTERS is defined
+ * If you use this file, you must be sure that LIBJPEG_NEED_FAR_POINTERS is defined
  * if you compile in a small-data memory model; it should NOT be defined if
  * you use a large-data memory model.  This file is not recommended if you
  * are using a flat-memory-space 386 environment such as DJGCC or Watcom C.
@@ -44,13 +44,13 @@
 #include "jpeglib.h"
 #include "jmemsys.h"		/* import the system-dependent declarations */
 
-#ifndef HAVE_STDLIB_H		/* <stdlib.h> should declare these */
+#ifndef LIBJPEG_HAVE_STDLIB_H		/* <stdlib.h> should declare these */
 extern void * malloc JPP((size_t size));
 extern void free JPP((void *ptr));
 extern char * getenv JPP((const char * name));
 #endif
 
-#ifdef NEED_FAR_POINTERS
+#ifdef LIBJPEG_NEED_FAR_POINTERS
 
 #ifdef __TURBOC__
 /* These definitions work for Borland C (Turbo C) */
@@ -64,12 +64,12 @@ extern char * getenv JPP((const char * name));
 #define far_free(x)	_ffree(x)
 #endif
 
-#else /* not NEED_FAR_POINTERS */
+#else /* not LIBJPEG_NEED_FAR_POINTERS */
 
 #define far_malloc(x)	malloc(x)
 #define far_free(x)	free(x)
 
-#endif /* NEED_FAR_POINTERS */
+#endif /* LIBJPEG_NEED_FAR_POINTERS */
 
 #ifdef DONT_USE_B_MODE		/* define mode parameters for fopen() */
 #define READ_BINARY	"r"
@@ -632,7 +632,7 @@ jpeg_mem_term (j_common_ptr cinfo)
   /* Microsoft C, at least in v6.00A, will not successfully reclaim freed
    * blocks of size > 32Kbytes unless we give it a kick in the rear, like so:
    */
-#ifdef NEED_FHEAPMIN
+#ifdef LIBJPEG_NEED_FHEAPMIN
   _fheapmin();
 #endif
 }
