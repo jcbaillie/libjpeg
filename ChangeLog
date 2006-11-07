@@ -1,3 +1,9 @@
+2006-11-07  Akim Demaille  <akim.demaille@free.fr>
+
+	Upgrade config.*
+	* build-aux/config.guess, build-aux/config.sub: Upgrade.
+	From Automake 1.10.
+
 2006-11-03  Akim Demaille  <akim.demaille@free.fr>
 
 	Adjust to the new location of jconfig.doc
@@ -5,7 +11,7 @@
 
 2006-10-31  Akim Demaille  <demaille@gostai.com>
 
-	Check PROTOTYPES, not HAVE_PROTOTYPES
+	Check LIBJPEG_PROTOTYPES, not HAVE_PROTOTYPES
 	* coderules.doc, jmorecfg.h, jpeglib.h, ckconfig.c, 
 	* install.doc: Do that, since that's the name used by Autoconf
 	and Automake.
