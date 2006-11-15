@@ -1,3 +1,10 @@
+2006-11-15  Akim Demaille  <akim.demaille@gmail.com>
+
+	Improvements
+	* Makefile.am (jconfig.h): Simplify the generation.
+	* build-aux/ax-prefix-config-h.m4: Fix the CONFIG_HEADERS ->
+	config_headers bug.
+
 2006-11-07  Akim Demaille  <demaille@gostai.com>
 
 	No longer special case jconfig.hin

@@ -37,18 +37,13 @@ SOURCES = $(LIBSOURCES) $(SYSDEPSOURCES) $(APPSOURCES)
 dist_include_HEADERS = jpeglib.h jmorecfg.h jerror.h
 nodist_include_HEADERS = jconfig.h
 
-# jconfig.h.  The technique comes from the handling of config.h by Automake.
-jconfig.h: jconfig.stamp
-	@if test ! -f $@; then \
-	  rm -f jconfig.stamp; \
-	  $(MAKE) $(AM_MAKEFLAGS) jconfig.stamp; \
-	else :; fi
-
-jconfig.stamp: $(srcdir)/config.hin $(top_builddir)/config.status
+# jconfig.h.  No need for stamps: Automake already uses one for config.h.
+jconfig.h: config.h
 	@rm -f $@
 	cd $(top_builddir) && $(SHELL) ./config.status jconfig.h
 	@touch $@
-CLEANFILES = _configs.sed jconfig.h jconfig.stamp
+
+CLEANFILES = _configs.sed jconfig.h
 
 
 # documentation, test, and support files
