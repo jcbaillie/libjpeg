@@ -51,8 +51,6 @@ DOCS = README install.doc usage.doc \
 	wizard.doc example.c libjpeg.doc structure.doc \
         coderules.doc filelist.doc change.log
 
-dist_man_MANS = cjpeg.1 djpeg.1 jpegtran.1 rdjpgcom.1 wrjpgcom.1 
-
 # Makefile templates.
 EXTRA_DIST = 								 \
 templates/makefile.cfg	 templates/makefile.ansi templates/makefile.unix \
@@ -78,13 +76,14 @@ TESTFILES = testorig.jpg testimg.ppm testimg.bmp testimg.jpg testprog.jpg \
 EXTRA_DIST += $(DOCS) $(SOURCES) $(OTHERFILES) $(TESTFILES)
 
 
-## ------------------------- ##
-## Programs and test suite.  ##
-## ------------------------- ##
+## ------------------------------------- ##
+## Programs, man pages, and test suite.  ##
+## ------------------------------------- ##
 
 AM_LDADD = libjpeg.la
 LDADD = $(AM_LDADD)
 jpeg_programs = cjpeg djpeg jpegtran rdjpgcom wrjpgcom
+man_mans = cjpeg.1 djpeg.1 jpegtran.1 rdjpgcom.1 wrjpgcom.1 
 
 cjpeg_SOURCES = cjpeg.c rdppm.c rdgif.c rdtarga.c rdrle.c rdbmp.c rdswitch.c \
         cdjpeg.c
@@ -95,6 +94,8 @@ jpegtran_SOURCES = jpegtran.c rdswitch.c cdjpeg.c transupp.c
 
 if PROGRAMS
 bin_PROGRAMS = $(jpeg_programs)
+dist_man_MANS = $(man_mans)
+
 check-local: cjpeg djpeg jpegtran
 	$(RM) testout*
 	./djpeg -dct int -ppm -outfile testout.ppm $(srcdir)/testorig.jpg
@@ -112,4 +113,5 @@ check-local: cjpeg djpeg jpegtran
 CLEANFILES += testout*
 else
 EXTRA_PROGRAMS = $(jpeg_programs)
+EXTRA_MANS = $(man_mans)
 endif

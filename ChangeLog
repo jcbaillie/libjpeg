@@ -1,5 +1,11 @@
 2006-11-15  Akim Demaille  <akim.demaille@gmail.com>
 
+	Don't install man pages when the programs are not installed.
+	* Makefile.am (EXTRA_MANS, man_mans): New.
+	(dist_man_MANS): Define only when PROGRAMS is set.
+
+2006-11-15  Akim Demaille  <akim.demaille@gmail.com>
+
 	Improvements
 	* Makefile.am (jconfig.h): Simplify the generation.
 	* build-aux/ax-prefix-config-h.m4: Fix the CONFIG_HEADERS ->
