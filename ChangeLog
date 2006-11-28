@@ -1,3 +1,10 @@
+2006-11-28  SIGOURE Benoit  <sigoure.benoit@lrde.epita.fr>
+
+	Fixes for Win32/VC++.
+	* djpeg.c: #warning is a GCC extension. Don't use it unless __GNUC__
+          is defined.
+	* jerror.c: Define _WIN32_WINNT before including windows.h.
+
 2006-11-15  Akim Demaille  <akim.demaille@gmail.com>
 
 	Don't install man pages when the programs are not installed.

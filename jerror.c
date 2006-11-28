@@ -25,7 +25,10 @@
 #include "jerror.h"
 
 #ifdef USE_WINDOWS_MESSAGEBOX
-#include <windows.h>
+# ifndef _WIN32_WINNT
+#  define _WIN32_WINNT 0x0400
+# endif
+# include <windows.h>
 #endif
 
 #ifndef EXIT_FAILURE		/* define exit() codes if not provided */

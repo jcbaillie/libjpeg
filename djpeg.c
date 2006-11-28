@@ -117,7 +117,9 @@ usage (void)
 	  (DEFAULT_FMT == FMT_OS2 ? " (default)" : ""));
 #endif
 #ifdef LIBJPEG_PPM_SUPPORTED
+#ifdef  __GNUC__
 #warning IT IS DEFINED
+#endif
   fprintf(stderr, "  -pnm           Select PBMPLUS (PPM/PGM) output format%s\n",
 	  (DEFAULT_FMT == FMT_PPM ? " (default)" : ""));
 #endif
