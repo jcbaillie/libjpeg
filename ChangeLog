@@ -1,3 +1,8 @@
+2007-01-20  Akim Demaille  <akim.demaille@free.fr>
+
+	vc80.pdb
+	* Makefile.am (CLEANFILES): Add it.
+
 2007-01-16  Jean-Christophe Baillie  <baillie@gostai.com>
 
 	modify svn:ignore to add install-sh. 

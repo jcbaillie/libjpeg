@@ -43,7 +43,7 @@ jconfig.h: config.h
 	cd $(top_builddir) && $(SHELL) ./config.status jconfig.h
 	@touch $@
 
-CLEANFILES = _configs.sed jconfig.h
+CLEANFILES = _configs.sed jconfig.h vc80.pdb
 
 
 # documentation, test, and support files
