@@ -43,7 +43,9 @@ jconfig.h: config.h
 	cd $(top_builddir) && $(SHELL) ./config.status jconfig.h
 	@touch $@
 
-CLEANFILES = _configs.sed jconfig.h vc80.pdb
+CLEANFILES = _configs.sed jconfig.h
+# Files created by VC++.
+CLEANFILES += vc80.pdb *.exe.manifest
 
 
 # documentation, test, and support files
@@ -83,7 +85,7 @@ EXTRA_DIST += $(DOCS) $(SOURCES) $(OTHERFILES) $(TESTFILES)
 AM_LDADD = libjpeg.la
 LDADD = $(AM_LDADD)
 jpeg_programs = cjpeg djpeg jpegtran rdjpgcom wrjpgcom
-man_mans = cjpeg.1 djpeg.1 jpegtran.1 rdjpgcom.1 wrjpgcom.1 
+man_mans = cjpeg.1 djpeg.1 jpegtran.1 rdjpgcom.1 wrjpgcom.1
 
 cjpeg_SOURCES = cjpeg.c rdppm.c rdgif.c rdtarga.c rdrle.c rdbmp.c rdswitch.c \
         cdjpeg.c
