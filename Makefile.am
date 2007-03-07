@@ -45,7 +45,7 @@ jconfig.h: config.h
 
 CLEANFILES = _configs.sed jconfig.h
 # Files created by VC++.
-CLEANFILES += vc80.pdb *.exe.manifest
+CLEANFILES += vc80.pdb *.exe.manifest *.exe.intermediate.manifest
 
 
 # documentation, test, and support files
