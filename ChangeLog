@@ -1,3 +1,8 @@
+2007-03-23  POTHIER Benoit  <pothier@gostai.com>
+
+	Do not build dynamic version of libjpeg.
+	* Makefile.am: Here.
+
 2007-03-23  Akim Demaille  <demaille@gostai.com>
 
 	Typo

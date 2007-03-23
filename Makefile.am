@@ -26,6 +26,7 @@ libjpeg_la_LIBADD = \
 	$(SYSDEPMEM)
 libjpeg_la_DEPENDENCIES = \
 	$(SYSDEPMEM) jconfig.h
+libjpeg_la_LDFLAGS = -all-static
 
 # memmgr back ends: compile only one of these into a working library
 SYSDEPSOURCES = jmemansi.c jmemname.c jmemnobs.c jmemdos.c jmemmac.c
