@@ -8,7 +8,7 @@ if INSTALL_LIBRARY
 lib_LTLIBRARIES = libjpeg.la
 else
 noinst_LTLIBRARIES = libjpeg.la
-end
+endif
 
 libjpeg_la_SOURCES = \
 	jcapimin.c jcapistd.c jccoefct.c jccolor.c jcdctmgr.c jchuff.c \

@@ -1,5 +1,10 @@
 2007-03-23  Akim Demaille  <demaille@gostai.com>
 
+	Typo
+	* Makefile.am: Fix endif.
+
+2007-03-23  Akim Demaille  <demaille@gostai.com>
+
 	--disable-library
 	* configure.ac: Support it.
 	* Makefile.am: Use it.
