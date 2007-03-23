@@ -1,3 +1,9 @@
+2007-03-23  Akim Demaille  <demaille@gostai.com>
+
+	--disable-library
+	* configure.ac: Support it.
+	* Makefile.am: Use it.
+
 2007-03-07  Akim Demaille  <akim.demaille@free.fr>
 
 	* Makefile.am (CLEANFILES): Add *.exe.intermediate.manifest.
