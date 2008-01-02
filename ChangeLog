@@ -1,3 +1,8 @@
+2008-01-02  POTHIER Benoit  <benoit.pothier@gmx.net>
+
+	Do not change code in libs having an upstream.
+	* Makefile.am: Here.
+
 2007-03-23  POTHIER Benoit  <pothier@gostai.com>
 
 	Do not build dynamic version of libjpeg.
