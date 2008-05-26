@@ -62,7 +62,7 @@ AH_BOTTOM([
  * (unsigned) shift; leave it undefined if ">>" is a signed (arithmetic) shift,
  * which is the normal and rational definition.
  */
-#undef RIGHT_SHIFT_IS_UNSIGNED
+# undef RIGHT_SHIFT_IS_UNSIGNED
 
 
 #endif /* JPEG_INTERNALS */
@@ -79,19 +79,19 @@ AH_BOTTOM([
 /* These defines indicate which image (non-JPEG) file formats are allowed. */
 
 /* Define if BMP image file format is supported. */
-#undef BMP_SUPPORTED
+# undef BMP_SUPPORTED
 
 /* Define if GIF image file format is supported. */
-#undef GIF_SUPPORTED
+# undef GIF_SUPPORTED
 
 /* Define if PBMPLUS PPM/PGM image file format is supported. */
-#undef PPM_SUPPORTED
+# undef PPM_SUPPORTED
 
 /* Define if Utah RLE image file format is supported. */
-#undef RLE_SUPPORTED
+# undef RLE_SUPPORTED
 
 /* Define if Targa image file format is supported. */
-#undef TARGA_SUPPORTED
+# undef TARGA_SUPPORTED
 
 
 
@@ -100,24 +100,24 @@ AH_BOTTOM([
  * your system can't cope with binary I/O to stdin/stdout.  See comments at
  * head of cjpeg.c or djpeg.c.
  */
-#undef TWO_FILE_COMMANDLINE
+# undef TWO_FILE_COMMANDLINE
 
 /* Define this if your system needs explicit cleanup of temporary files.
  * This is crucial under MS-DOS, where the temporary "files" may be areas
  * of extended memory; on most other systems it's not as important.
  */
-#undef NEED_SIGNAL_CATCHER
+# undef NEED_SIGNAL_CATCHER
 
 /* By default, we open image files with fopen(...,"rb") or fopen(...,"wb").
  * This is necessary on systems that distinguish text files from binary files,
  * and is harmless on most systems that don't.  If you have one of the rare
  * systems that complains about the "b" spec, define this symbol.
  */
-#undef DONT_USE_B_MODE
+# undef DONT_USE_B_MODE
 
 /* Define this if you want percent-done progress reports from cjpeg/djpeg.
  */
-#undef PROGRESS_REPORT
+# undef PROGRESS_REPORT
 
 
 #endif /* JPEG_CJPEG_DJPEG */
