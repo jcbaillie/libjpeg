@@ -78,11 +78,22 @@ AH_BOTTOM([
 
 /* These defines indicate which image (non-JPEG) file formats are allowed. */
 
-#define BMP_SUPPORTED		/* BMP image file format */
-#define GIF_SUPPORTED		/* GIF image file format */
-#define PPM_SUPPORTED		/* PBMPLUS PPM/PGM image file format */
-#undef RLE_SUPPORTED		/* Utah RLE image file format */
-#define TARGA_SUPPORTED		/* Targa image file format */
+/* Define if BMP image file format is supported. */
+#undef BMP_SUPPORTED
+
+/* Define if GIF image file format is supported. */
+#undef GIF_SUPPORTED
+
+/* Define if PBMPLUS PPM/PGM image file format is supported. */
+#undef PPM_SUPPORTED
+
+/* Define if Utah RLE image file format is supported. */
+#undef RLE_SUPPORTED
+
+/* Define if Targa image file format is supported. */
+#undef TARGA_SUPPORTED
+
+
 
 /* Define this if you want to name both input and output files on the command
  * line, rather than using stdout and optionally stdin.  You MUST do this if
