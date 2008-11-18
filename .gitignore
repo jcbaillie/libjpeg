@@ -3,7 +3,6 @@ aclocal.m4
 autom4te.cache
 build-aux/depcomp
 build-aux/install-sh
-build-aux/ltmain.sh
 config.hin
 configure
 build-aux/config.guess
