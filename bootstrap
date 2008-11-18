@@ -1,14 +1,18 @@
 #! /bin/sh
 
-# On some environments (Darwin Ports), libtoolize is glibtoolize.
-# I suppose their autoreconf is adjusted accordingly, but I use
-# my custom Autoconf...
-for lt in "$LIBTOOLIZE" libtoolize glibtoolize
-do
-  if ($lt --version) >/dev/null 2>&1; then
-    export LIBTOOLIZE="$lt"
-    break
-  fi
-done
+## We embed the libtool dependencies in the repository, so don't
+## call libtoolize automatically here.
+##
+## # On some environments (Darwin Ports), libtoolize is glibtoolize.
+## # I suppose their autoreconf is adjusted accordingly, but I use
+## # my custom Autoconf...
+## for lt in "$LIBTOOLIZE" libtoolize glibtoolize
+## do
+##   if ($lt --version) >/dev/null 2>&1; then
+##     export LIBTOOLIZE="$lt"
+##     break
+##   fi
+## done
+export LIBTOOLIZE=true
 
 autoreconf -f -v -i
