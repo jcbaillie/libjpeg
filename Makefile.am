@@ -3,7 +3,7 @@ CLEANFILES =
 EXTRA_DIST =
 
 # Work around libtool issues.
-build_aux_dir = $(top_builddir)/build-aux
+build_aux_dir = $(top_srcdir)/build-aux
 include build-aux/fix-libtool-la.mk
 
 # That's where aclocal extensions are.
