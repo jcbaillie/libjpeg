@@ -1,4 +1,10 @@
 # Makefile for Independent JPEG Group's software
+CLEANFILES =
+EXTRA_DIST =
+
+# Work around libtool issues.
+build_aux_dir = $(top_builddir)/build-aux
+include build-aux/fix-libtool-la.mk
 
 # That's where aclocal extensions are.
 ACLOCAL_AMFLAGS = -I build-aux
@@ -48,7 +54,7 @@ jconfig.h: config.h
 	cd $(top_builddir) && $(SHELL) ./config.status jconfig.h
 	@touch $@
 
-CLEANFILES = _configs.sed jconfig.h
+CLEANFILES += _configs.sed jconfig.h
 # Files created by VC++.
 CLEANFILES += vc80.pdb *.exe.manifest *.exe.intermediate.manifest
 
@@ -59,7 +65,7 @@ DOCS = README install.doc usage.doc \
         coderules.doc filelist.doc change.log
 
 # Makefile templates.
-EXTRA_DIST = 								 \
+EXTRA_DIST += 								 \
 templates/makefile.cfg	 templates/makefile.ansi templates/makefile.unix \
 templates/makefile.bcc	 templates/makefile.mc6  templates/makefile.dj	 \
 templates/makefile.wat	 templates/makefile.vc   templates/makelib.ds	 \
