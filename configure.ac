@@ -119,8 +119,13 @@ AH_BOTTOM([
  */
 # undef PROGRESS_REPORT
 
-
 #endif /* JPEG_CJPEG_DJPEG */
+
+/*
+ * Local] [Variables:
+ * mode: C
+ * End:
+ */
 ])
 
 # Put here the object file name for the correct system-dependent memory
