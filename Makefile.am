@@ -72,7 +72,8 @@ lib_LTLIBRARIES = lib@LIBJPEG_NAME@@LIBSFX@.la
 # Library sources for libjpeg.la
 lib@LIBJPEG_NAME@@LIBSFX@_la_SOURCES = $(LIBSOURCES)
 
-# LDFLAGS for libjpeg.la
+# Flags for libjpeg.la
+lib@LIBJPEG_NAME@@LIBSFX@_la_CPPFLAGS = -DBUILDING_JPEG
 lib@LIBJPEG_NAME@@LIBSFX@_la_LDFLAGS = -no-undefined \
         -version-info $(JPEG_LIB_VERSION)
 
