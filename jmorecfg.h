@@ -1,7 +1,7 @@
 /*
  * jmorecfg.h
  *
- * Copyright (C) 1991-1997, Thomas G. Lane.
+ * Copyright (C) 1991-1997, 2009, Thomas G. Lane.
  * This file is part of the Independent JPEG Group's software.
  * For conditions of distribution and use, see the accompanying README file.
  *
@@ -173,6 +173,22 @@ typedef unsigned int JDIMENSION;
 #define JPEG_MAX_DIMENSION  65500L  /* a tad under 64K to prevent overflows */
 
 
+/* Handle the visibility of the symbols.  Under MSVC, export during
+ * compilation, import when using them.
+ */
+# ifdef _MSC_VER
+#  ifdef BUILDING_JPEG
+#   define JPEG_API __declspec(dllexport)
+#  else
+#   define JPEG_API __declspec(dllimport)
+#  endif
+# elif 2 < __GNUC__ || (__GNUC__ == 2 && 5 <= __GNUC_MINOR__)
+#  define JPEG_API __attribute__((visibility("default")))
+# else
+#  define JPEG_API
+# endif
+
+
 /* These macros are used in all function definitions and extern declarations.
  * You could modify them if you need to change function linkage conventions;
  * in particular, you'll need to do that to make the library a Windows DLL.
@@ -187,7 +203,7 @@ typedef unsigned int JDIMENSION;
 /* a function referenced thru EXTERNs: */
 #define GLOBAL(type)		type
 /* a reference to a GLOBAL function: */
-#define EXTERN(type)		extern type
+#define EXTERN(type)		JPEG_API extern type
 
 
 /* This macro is used to declare a "method", that is, a function pointer.
