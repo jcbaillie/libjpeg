@@ -139,6 +139,7 @@ esac
 AC_SUBST([SYSDEPMEM])
 
 AC_PROG_LIBTOOL
+URBI_LIBTOOL
 
 AC_CONFIG_HEADERS([config.h:config.hin])
 AX_PREFIX_CONFIG_H([jconfig.h])
