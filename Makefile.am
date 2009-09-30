@@ -30,7 +30,7 @@ libjpeg_la_SOURCES += \
   jpegint.h jpeglib.h jversion.h cdjpeg.h cderror.h transupp.h
 # Export the shared library symbols.
 libjpeg_la_CPPFLAGS = -DBUILDING_JPEG
-libjpeg_la_LDFLAGS = -no-undefined
+libjpeg_la_LDFLAGS = -no-undefined -avoid-version
 libjpeg_la_LIBADD = \
   $(SYSDEPMEM)
 libjpeg_la_DEPENDENCIES = \
