@@ -16,24 +16,24 @@ else
 noinst_LTLIBRARIES = libjpeg.la
 endif
 
-libjpeg_la_SOURCES = \
-  jcapimin.c jcapistd.c jccoefct.c jccolor.c jcdctmgr.c jchuff.c \
-  jcinit.c jcmainct.c jcmarker.c jcmaster.c jcomapi.c jcparam.c \
-  jcphuff.c jcprepct.c jcsample.c jctrans.c jdapimin.c jdapistd.c \
-  jdatadst.c jdatasrc.c jdcoefct.c jdcolor.c jddctmgr.c jdhuff.c \
-  jdinput.c jdmainct.c jdmarker.c jdmaster.c jdmerge.c jdphuff.c \
-  jdpostct.c jdsample.c jdtrans.c jerror.c jfdctflt.c jfdctfst.c \
-  jfdctint.c jidctflt.c jidctfst.c jidctint.c jidctred.c jquant1.c \
+libjpeg_la_SOURCES =							\
+  jcapimin.c jcapistd.c jccoefct.c jccolor.c jcdctmgr.c jchuff.c	\
+  jcinit.c jcmainct.c jcmarker.c jcmaster.c jcomapi.c jcparam.c		\
+  jcphuff.c jcprepct.c jcsample.c jctrans.c jdapimin.c jdapistd.c	\
+  jdatadst.c jdatasrc.c jdcoefct.c jdcolor.c jddctmgr.c jdhuff.c	\
+  jdinput.c jdmainct.c jdmarker.c jdmaster.c jdmerge.c jdphuff.c	\
+  jdpostct.c jdsample.c jdtrans.c jerror.c jfdctflt.c jfdctfst.c	\
+  jfdctint.c jidctflt.c jidctfst.c jidctint.c jidctred.c jquant1.c	\
   jquant2.c jutils.c jmemmgr.c
-libjpeg_la_SOURCES += \
-  jchuff.h jdhuff.h jdct.h jerror.h jinclude.h jmemsys.h jmorecfg.h \
+libjpeg_la_SOURCES +=							\
+  jchuff.h jdhuff.h jdct.h jerror.h jinclude.h jmemsys.h jmorecfg.h	\
   jpegint.h jpeglib.h jversion.h cdjpeg.h cderror.h transupp.h
 # Export the shared library symbols.
 libjpeg_la_CPPFLAGS = -DBUILDING_JPEG
 libjpeg_la_LDFLAGS = -no-undefined -avoid-version
-libjpeg_la_LIBADD = \
+libjpeg_la_LIBADD =				\
   $(SYSDEPMEM)
-libjpeg_la_DEPENDENCIES = \
+libjpeg_la_DEPENDENCIES =			\
   $(SYSDEPMEM) jconfig.h
 
 # memmgr back ends: compile only one of these into a working library
@@ -41,9 +41,9 @@ SYSDEPSOURCES = jmemansi.c jmemname.c jmemnobs.c jmemdos.c jmemmac.c
 EXTRA_libjpeg_la_SOURCES = $(SYSDEPSOURCES)
 
 # source files: cjpeg/djpeg/jpegtran applications, also rdjpgcom/wrjpgcom
-APPSOURCES = cjpeg.c djpeg.c jpegtran.c rdjpgcom.c wrjpgcom.c cdjpeg.c \
-        rdcolmap.c rdswitch.c transupp.c rdppm.c wrppm.c rdgif.c wrgif.c \
-        rdtarga.c wrtarga.c rdbmp.c wrbmp.c rdrle.c wrrle.c
+APPSOURCES = cjpeg.c djpeg.c jpegtran.c rdjpgcom.c wrjpgcom.c cdjpeg.c	\
+  rdcolmap.c rdswitch.c transupp.c rdppm.c wrppm.c rdgif.c wrgif.c	\
+  rdtarga.c wrtarga.c rdbmp.c wrbmp.c rdrle.c wrrle.c
 SOURCES = $(LIBSOURCES) $(SYSDEPSOURCES) $(APPSOURCES)
 
 # files included by source files
@@ -62,31 +62,31 @@ CLEANFILES += vc80.pdb *.exe.manifest *.exe.intermediate.manifest
 
 
 # documentation, test, and support files
-DOCS = README install.doc usage.doc \
-	wizard.doc example.c libjpeg.doc structure.doc \
-        coderules.doc filelist.doc change.log
+DOCS = README install.doc usage.doc			\
+  wizard.doc example.c libjpeg.doc structure.doc	\
+  coderules.doc filelist.doc change.log
 
 # Makefile templates.
-EXTRA_DIST += 								 \
-templates/makefile.cfg	 templates/makefile.ansi templates/makefile.unix \
-templates/makefile.bcc	 templates/makefile.mc6  templates/makefile.dj	 \
-templates/makefile.wat	 templates/makefile.vc   templates/makelib.ds	 \
-templates/makeapps.ds	 templates/makeproj.mac  templates/makcjpeg.st	 \
-templates/makdjpeg.st	 templates/makljpeg.st   templates/maktjpeg.st	 \
-templates/makefile.manx	 templates/makefile.sas  templates/makefile.mms	 \
-templates/makefile.vms	 templates/makvms.opt
+EXTRA_DIST +=								  \
+  templates/makefile.cfg  templates/makefile.ansi templates/makefile.unix \
+  templates/makefile.bcc  templates/makefile.mc6  templates/makefile.dj	  \
+  templates/makefile.wat  templates/makefile.vc   templates/makelib.ds	  \
+  templates/makeapps.ds   templates/makeproj.mac  templates/makcjpeg.st	  \
+  templates/makdjpeg.st   templates/makljpeg.st   templates/maktjpeg.st	  \
+  templates/makefile.manx templates/makefile.sas  templates/makefile.mms  \
+  templates/makefile.vms  templates/makvms.opt
 
 # Configuration file templates.
 EXTRA_DIST +=								\
-templates/jconfig.bcc templates/jconfig.mc6  templates/jconfig.dj	\
-templates/jconfig.wat templates/jconfig.vc   templates/jconfig.mac	\
-templates/jconfig.st  templates/jconfig.manx templates/jconfig.sas	\
-templates/jconfig.vms templates/jconfig.doc
+  templates/jconfig.bcc templates/jconfig.mc6  templates/jconfig.dj	\
+  templates/jconfig.wat templates/jconfig.vc   templates/jconfig.mac	\
+  templates/jconfig.st  templates/jconfig.manx templates/jconfig.sas	\
+  templates/jconfig.vms templates/jconfig.doc
 
 OTHERFILES = ckconfig.c jmemdosa.asm
 
 TESTFILES = testorig.jpg testimg.ppm testimg.bmp testimg.jpg testprog.jpg \
-        testimgp.jpg
+ testimgp.jpg
 
 EXTRA_DIST += $(DOCS) $(SOURCES) $(OTHERFILES) $(TESTFILES)
 
@@ -101,9 +101,9 @@ jpeg_programs = cjpeg djpeg jpegtran rdjpgcom wrjpgcom
 man_mans = cjpeg.1 djpeg.1 jpegtran.1 rdjpgcom.1 wrjpgcom.1
 
 cjpeg_SOURCES = cjpeg.c rdppm.c rdgif.c rdtarga.c rdrle.c rdbmp.c rdswitch.c \
-        cdjpeg.c
+  cdjpeg.c
 djpeg_SOURCES = djpeg.c wrppm.c wrgif.c wrtarga.c wrrle.c wrbmp.c rdcolmap.c \
-        cdjpeg.c
+  cdjpeg.c
 jpegtran_SOURCES = jpegtran.c rdswitch.c cdjpeg.c transupp.c
 
 
