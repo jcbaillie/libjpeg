@@ -5,11 +5,15 @@ AC_CONFIG_AUX_DIR([build-aux])
 
 AM_INIT_AUTOMAKE([1.9.6 foreign build-aux/ansi2knr])
 
-AC_ARG_ENABLE([programs],
-	      [AC_HELP_STRING([--disable-programs],
-			      [just build the library, not the programs])],
-	      [], [enable_programs=yes])
-AM_CONDITIONAL([PROGRAMS], [test x"$enable_programs" == xyes])
+AC_ARG_ENABLE([cflags],
+              [AC_HELP_STRING([--with-cflags=FLAGS],
+                              [additional compiler flags])],
+              [CFLAGS="$CFLAGS $enable_cflags"])
+
+AC_ARG_ENABLE([ldflags],
+              [AC_HELP_STRING([--with-ldflags=FLAGS],
+                              [additional linker flags])],
+              [LDFLAGS="$LDFLAGS $enable_ldflags"])
 
 AC_ARG_ENABLE([library],
 	      [AC_HELP_STRING([--disable-library],
@@ -17,6 +21,11 @@ AC_ARG_ENABLE([library],
 	      [], [enable_library=yes])
 AM_CONDITIONAL([INSTALL_LIBRARY], [test x"$enable_library" == xyes])
 
+AC_ARG_ENABLE([programs],
+	      [AC_HELP_STRING([--disable-programs],
+			      [just build the library, not the programs])],
+	      [], [enable_programs=yes])
+AM_CONDITIONAL([PROGRAMS], [test x"$enable_programs" == xyes])
 
 AC_PROG_CC
 AC_CHECK_TYPES([unsigned char, unsigned short])
