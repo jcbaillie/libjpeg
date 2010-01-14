@@ -32,7 +32,7 @@ AC_CHECK_TYPES([unsigned char, unsigned short])
 AM_C_PROTOTYPES
 
 AC_CHECK_HEADERS([stddef.h stdlib.h])
-
+AC_SUBST([LIBSFX], [$LIBSFX])
 AH_TEMPLATE([NEED_SYS_TYPES_H],
   [Define this if your system does not provide typedef size_t in any of the
    ANSI-standard places (stddef.h, stdlib.h, or stdio.h), but places it in

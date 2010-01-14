@@ -11,12 +11,12 @@ ACLOCAL_AMFLAGS = -I build-aux
 
 # source files: JPEG library proper
 if INSTALL_LIBRARY
-lib_LTLIBRARIES = libjpeg.la
+lib_LTLIBRARIES = libjpeg@LIBSFX@.la
 else
-noinst_LTLIBRARIES = libjpeg.la
+noinst_LTLIBRARIES = libjpeg@LIBSFX@.la
 endif
 
-libjpeg_la_SOURCES =							\
+libjpeg@LIBSFX@_la_SOURCES =							\
   jcapimin.c jcapistd.c jccoefct.c jccolor.c jcdctmgr.c jchuff.c	\
   jcinit.c jcmainct.c jcmarker.c jcmaster.c jcomapi.c jcparam.c		\
   jcphuff.c jcprepct.c jcsample.c jctrans.c jdapimin.c jdapistd.c	\
@@ -25,20 +25,20 @@ libjpeg_la_SOURCES =							\
   jdpostct.c jdsample.c jdtrans.c jerror.c jfdctflt.c jfdctfst.c	\
   jfdctint.c jidctflt.c jidctfst.c jidctint.c jidctred.c jquant1.c	\
   jquant2.c jutils.c jmemmgr.c
-libjpeg_la_SOURCES +=							\
+libjpeg@LIBSFX@_la_SOURCES +=							\
   jchuff.h jdhuff.h jdct.h jerror.h jinclude.h jmemsys.h jmorecfg.h	\
   jpegint.h jpeglib.h jversion.h cdjpeg.h cderror.h transupp.h
 # Export the shared library symbols.
-libjpeg_la_CPPFLAGS = -DBUILDING_JPEG
-libjpeg_la_LDFLAGS = -no-undefined -avoid-version
-libjpeg_la_LIBADD =				\
+libjpeg@LIBSFX@_la_CPPFLAGS = -DBUILDING_JPEG
+libjpeg@LIBSFX@_la_LDFLAGS = -no-undefined -avoid-version
+libjpeg@LIBSFX@_la_LIBADD =				\
   $(SYSDEPMEM)
-libjpeg_la_DEPENDENCIES =			\
+libjpeg@LIBSFX@_la_DEPENDENCIES =			\
   $(SYSDEPMEM) jconfig.h
 
 # memmgr back ends: compile only one of these into a working library
 SYSDEPSOURCES = jmemansi.c jmemname.c jmemnobs.c jmemdos.c jmemmac.c
-EXTRA_libjpeg_la_SOURCES = $(SYSDEPSOURCES)
+EXTRA_libjpeg@LIBSFX@_la_SOURCES = $(SYSDEPSOURCES)
 
 # source files: cjpeg/djpeg/jpegtran applications, also rdjpgcom/wrjpgcom
 APPSOURCES = cjpeg.c djpeg.c jpegtran.c rdjpgcom.c wrjpgcom.c cdjpeg.c	\
@@ -95,7 +95,7 @@ EXTRA_DIST += $(DOCS) $(SOURCES) $(OTHERFILES) $(TESTFILES)
 ## Programs, man pages, and test suite.  ##
 ## ------------------------------------- ##
 
-AM_LDADD = libjpeg.la
+AM_LDADD = libjpeg@LIBSFX@.la
 LDADD = $(AM_LDADD)
 jpeg_programs = cjpeg djpeg jpegtran rdjpgcom wrjpgcom
 man_mans = cjpeg.1 djpeg.1 jpegtran.1 rdjpgcom.1 wrjpgcom.1
