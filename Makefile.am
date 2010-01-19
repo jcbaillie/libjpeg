@@ -16,7 +16,7 @@ else
 noinst_LTLIBRARIES = libjpeg@LIBSFX@.la
 endif
 
-libjpeg@LIBSFX@_la_SOURCES =							\
+libjpeg@LIBSFX@_la_SOURCES =						\
   jcapimin.c jcapistd.c jccoefct.c jccolor.c jcdctmgr.c jchuff.c	\
   jcinit.c jcmainct.c jcmarker.c jcmaster.c jcomapi.c jcparam.c		\
   jcphuff.c jcprepct.c jcsample.c jctrans.c jdapimin.c jdapistd.c	\
@@ -25,15 +25,15 @@ libjpeg@LIBSFX@_la_SOURCES =							\
   jdpostct.c jdsample.c jdtrans.c jerror.c jfdctflt.c jfdctfst.c	\
   jfdctint.c jidctflt.c jidctfst.c jidctint.c jidctred.c jquant1.c	\
   jquant2.c jutils.c jmemmgr.c
-libjpeg@LIBSFX@_la_SOURCES +=							\
+libjpeg@LIBSFX@_la_SOURCES +=						\
   jchuff.h jdhuff.h jdct.h jerror.h jinclude.h jmemsys.h jmorecfg.h	\
   jpegint.h jpeglib.h jversion.h cdjpeg.h cderror.h transupp.h
 # Export the shared library symbols.
 libjpeg@LIBSFX@_la_CPPFLAGS = -DBUILDING_JPEG
 libjpeg@LIBSFX@_la_LDFLAGS = -no-undefined -avoid-version
-libjpeg@LIBSFX@_la_LIBADD =				\
+libjpeg@LIBSFX@_la_LIBADD =			\
   $(SYSDEPMEM)
-libjpeg@LIBSFX@_la_DEPENDENCIES =			\
+libjpeg@LIBSFX@_la_DEPENDENCIES =		\
   $(SYSDEPMEM) jconfig.h
 
 # memmgr back ends: compile only one of these into a working library
