@@ -34,7 +34,7 @@ libjpeg@LIBSFX@_la_LDFLAGS = -no-undefined -avoid-version
 libjpeg@LIBSFX@_la_LIBADD =			\
   $(SYSDEPMEM)
 libjpeg@LIBSFX@_la_DEPENDENCIES =		\
-  $(SYSDEPMEM) jconfig.h
+  $(SYSDEPMEM)
 
 # memmgr back ends: compile only one of these into a working library
 SYSDEPSOURCES = jmemansi.c jmemname.c jmemnobs.c jmemdos.c jmemmac.c
@@ -49,6 +49,7 @@ SOURCES = $(LIBSOURCES) $(SYSDEPSOURCES) $(APPSOURCES)
 # files included by source files
 dist_include_HEADERS = jpeglib.h jmorecfg.h jerror.h
 nodist_include_HEADERS = jconfig.h
+BUILT_SOURCES = $(nodist_include_HEADERS)
 
 # jconfig.h.  No need for stamps: Automake already uses one for config.h.
 jconfig.h: config.h
