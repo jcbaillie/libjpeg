@@ -1,10 +1,11 @@
 Makefile.in
 aclocal.m4
 autom4te.cache
-build-aux/depcomp
-build-aux/install-sh
-config.hin
-configure
 build-aux/config.guess
 build-aux/config.sub
+build-aux/depcomp
+build-aux/install-sh
 build-aux/missing
+config.hin
+config.hin~
+configure
