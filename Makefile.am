@@ -64,7 +64,7 @@ CLEANFILES += vc80.pdb *.exe.manifest *.exe.intermediate.manifest
 
 # documentation, test, and support files
 DOCS = README install.doc usage.doc			\
-  wizard.doc example.c lib@LIBJPEG_NAME@.doc structure.doc	\
+  wizard.doc example.c libjpeg.doc structure.doc	\
   coderules.doc filelist.doc change.log
 
 # Makefile templates.
