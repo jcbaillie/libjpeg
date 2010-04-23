@@ -32,7 +32,6 @@ AC_CHECK_TYPES([unsigned char, unsigned short])
 AM_C_PROTOTYPES
 
 AC_CHECK_HEADERS([stddef.h stdlib.h])
-AC_SUBST([LIBSFX], [$LIBSFX])
 AH_TEMPLATE([NEED_SYS_TYPES_H],
   [Define this if your system does not provide typedef size_t in any of the
    ANSI-standard places (stddef.h, stdlib.h, or stdio.h), but places it in
@@ -147,8 +146,18 @@ case $host in
 esac
 AC_SUBST([SYSDEPMEM])
 
-AC_PROG_LIBTOOL
+# The name of the library to build (not including the "lib" prefix).
+# Defaults to its original name, but can be changed to another name to
+# avoid conflicts.
+: ${LIBJPEG_NAME=jpeg}
+AC_SUBST([LIBJPEG_NAME])
+
+# An extension to the library.  Can be empty, or, for instance, "-debug".
+AC_SUBST([LIBSFX])
+
+
 AC_DISABLE_STATIC
+AC_PROG_LIBTOOL
 URBI_LIBTOOL
 
 AC_CONFIG_HEADERS([config.h:config.hin])

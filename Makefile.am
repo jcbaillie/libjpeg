@@ -11,12 +11,12 @@ ACLOCAL_AMFLAGS = -I build-aux
 
 # source files: JPEG library proper
 if INSTALL_LIBRARY
-lib_LTLIBRARIES = libjpeg@LIBSFX@.la
+lib_LTLIBRARIES = lib@LIBJPEG_NAME@@LIBSFX@.la
 else
-noinst_LTLIBRARIES = libjpeg@LIBSFX@.la
+noinst_LTLIBRARIES = lib@LIBJPEG_NAME@@LIBSFX@.la
 endif
 
-libjpeg@LIBSFX@_la_SOURCES =						\
+lib@LIBJPEG_NAME@@LIBSFX@_la_SOURCES =					\
   jcapimin.c jcapistd.c jccoefct.c jccolor.c jcdctmgr.c jchuff.c	\
   jcinit.c jcmainct.c jcmarker.c jcmaster.c jcomapi.c jcparam.c		\
   jcphuff.c jcprepct.c jcsample.c jctrans.c jdapimin.c jdapistd.c	\
@@ -25,20 +25,20 @@ libjpeg@LIBSFX@_la_SOURCES =						\
   jdpostct.c jdsample.c jdtrans.c jerror.c jfdctflt.c jfdctfst.c	\
   jfdctint.c jidctflt.c jidctfst.c jidctint.c jidctred.c jquant1.c	\
   jquant2.c jutils.c jmemmgr.c
-libjpeg@LIBSFX@_la_SOURCES +=						\
+lib@LIBJPEG_NAME@@LIBSFX@_la_SOURCES +=					\
   jchuff.h jdhuff.h jdct.h jerror.h jinclude.h jmemsys.h jmorecfg.h	\
   jpegint.h jpeglib.h jversion.h cdjpeg.h cderror.h transupp.h
 # Export the shared library symbols.
-libjpeg@LIBSFX@_la_CPPFLAGS = -DBUILDING_JPEG
-libjpeg@LIBSFX@_la_LDFLAGS = -no-undefined -avoid-version
-libjpeg@LIBSFX@_la_LIBADD =			\
+lib@LIBJPEG_NAME@@LIBSFX@_la_CPPFLAGS = -DBUILDING_JPEG
+lib@LIBJPEG_NAME@@LIBSFX@_la_LDFLAGS = -no-undefined -avoid-version
+lib@LIBJPEG_NAME@@LIBSFX@_la_LIBADD =			\
   $(SYSDEPMEM)
-libjpeg@LIBSFX@_la_DEPENDENCIES =		\
+lib@LIBJPEG_NAME@@LIBSFX@_la_DEPENDENCIES =		\
   $(SYSDEPMEM)
 
 # memmgr back ends: compile only one of these into a working library
 SYSDEPSOURCES = jmemansi.c jmemname.c jmemnobs.c jmemdos.c jmemmac.c
-EXTRA_libjpeg@LIBSFX@_la_SOURCES = $(SYSDEPSOURCES)
+EXTRA_lib@LIBJPEG_NAME@@LIBSFX@_la_SOURCES = $(SYSDEPSOURCES)
 
 # source files: cjpeg/djpeg/jpegtran applications, also rdjpgcom/wrjpgcom
 APPSOURCES = cjpeg.c djpeg.c jpegtran.c rdjpgcom.c wrjpgcom.c cdjpeg.c	\
@@ -64,7 +64,7 @@ CLEANFILES += vc80.pdb *.exe.manifest *.exe.intermediate.manifest
 
 # documentation, test, and support files
 DOCS = README install.doc usage.doc			\
-  wizard.doc example.c libjpeg.doc structure.doc	\
+  wizard.doc example.c lib@LIBJPEG_NAME@.doc structure.doc	\
   coderules.doc filelist.doc change.log
 
 # Makefile templates.
@@ -96,7 +96,7 @@ EXTRA_DIST += $(DOCS) $(SOURCES) $(OTHERFILES) $(TESTFILES)
 ## Programs, man pages, and test suite.  ##
 ## ------------------------------------- ##
 
-AM_LDADD = libjpeg@LIBSFX@.la
+AM_LDADD = lib@LIBJPEG_NAME@@LIBSFX@.la
 LDADD = $(AM_LDADD)
 jpeg_programs = cjpeg djpeg jpegtran rdjpgcom wrjpgcom
 man_mans = cjpeg.1 djpeg.1 jpegtran.1 rdjpgcom.1 wrjpgcom.1
