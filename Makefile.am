@@ -112,22 +112,32 @@ if PROGRAMS
 bin_PROGRAMS = $(jpeg_programs)
 dist_man_MANS = $(man_mans)
 
-check-local: cjpeg djpeg jpegtran
-	$(RM) testout*
-	./djpeg -dct int -ppm -outfile testout.ppm $(srcdir)/testorig.jpg
-	./djpeg -dct int -bmp -colors 256 -outfile testout.bmp $(srcdir)/testorig.jpg
+## Don't run these tests, since they depend on features explicitly
+## disabled in configure.ac.  FIXME: define some AM_CONDITIONAL to run
+## these tests when applicable.
+##
+## check-local: check-local-cjpeg check-local-djpeg
+check-local: check-local-jpegtran
+
+check-local-cjpeg: cjpeg
 	./cjpeg -dct int -outfile testout.jpg $(srcdir)/testimg.ppm
-	./djpeg -dct int -ppm -outfile testoutp.ppm $(srcdir)/testprog.jpg
-	./cjpeg -dct int -progressive -opt -outfile testoutp.jpg $(srcdir)/testimg.ppm
-	./jpegtran -outfile testoutt.jpg $(srcdir)/testprog.jpg
-	cmp $(srcdir)/testimg.ppm testout.ppm
-	cmp $(srcdir)/testimg.bmp testout.bmp
 	cmp $(srcdir)/testimg.jpg testout.jpg
-	cmp $(srcdir)/testimg.ppm testoutp.ppm
+	./cjpeg -dct int -progressive -opt -outfile testoutp.jpg $(srcdir)/testimg.ppm
 	cmp $(srcdir)/testimgp.jpg testoutp.jpg
+
+check-local-djpeg: djpeg
+	./djpeg -dct int -ppm -outfile testout.ppm $(srcdir)/testorig.jpg
+	cmp $(srcdir)/testimg.ppm testout.ppm
+	./djpeg -dct int -bmp -colors 256 -outfile testout.bmp $(srcdir)/testorig.jpg
+	cmp $(srcdir)/testimg.bmp testout.bmp
+	./djpeg -dct int -ppm -outfile testoutp.ppm $(srcdir)/testprog.jpg
+	cmp $(srcdir)/testimg.ppm testoutp.ppm
+
+check-local-jpegtran: jpegtran
+	./jpegtran -outfile testoutt.jpg $(srcdir)/testprog.jpg
 	cmp $(srcdir)/testorig.jpg testoutt.jpg
 CLEANFILES += testout*
 else
 EXTRA_PROGRAMS = $(jpeg_programs)
-EXTRA_MANS = $(man_mans)
+dist_noinst_MANS = $(man_mans)
 endif
