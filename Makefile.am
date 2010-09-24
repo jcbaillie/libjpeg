@@ -110,7 +110,7 @@ jpegtran_SOURCES = jpegtran.c rdswitch.c cdjpeg.c transupp.c
 
 if PROGRAMS
 bin_PROGRAMS = $(jpeg_programs)
-dist_man_MANS = $(man_mans)
+dist_man1_MANS = $(man_mans)
 
 ## Don't run these tests, since they depend on features explicitly
 ## disabled in configure.ac.  FIXME: define some AM_CONDITIONAL to run
@@ -139,5 +139,6 @@ check-local-jpegtran: jpegtran
 CLEANFILES += testout*
 else
 EXTRA_PROGRAMS = $(jpeg_programs)
-dist_noinst_MANS = $(man_mans)
+# dist_noinst_MANS does not work with Automake 1.11.1 (and before).
+EXTRA_DIST += $(man_mans)
 endif
