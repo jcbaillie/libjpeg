@@ -3,7 +3,8 @@ m4_pattern_forbid([^AX_])
 AC_INIT([libjpeg], [6b])
 AC_CONFIG_AUX_DIR([build-aux])
 
-AM_INIT_AUTOMAKE([1.9.6 foreign build-aux/ansi2knr])
+AM_INIT_AUTOMAKE([1.11.1 foreign build-aux/ansi2knr silent-rules])
+AM_SILENT_RULES([yes])
 
 AC_ARG_ENABLE([cflags],
               [AC_HELP_STRING([--with-cflags=FLAGS],
