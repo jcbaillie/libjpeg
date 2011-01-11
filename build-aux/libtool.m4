@@ -1,7 +1,7 @@
 # libtool.m4 - Configure libtool for the host system. -*-Autoconf-*-
 #
 #   Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001, 2003, 2004, 2005,
-#                 2006, 2007, 2008 Free Software Foundation, Inc.
+#                 2006, 2007, 2008, 2011 Free Software Foundation, Inc.
 #   Written by Gordon Matzigkeit, 1996
 #
 # This file is free software; the Free Software Foundation gives
@@ -1052,7 +1052,7 @@ m4_defun([_LT_DARWIN_LINKER_FEATURES],
 # to the aix ld manual.
 m4_defun([_LT_SYS_MODULE_PATH_AIX],
 [m4_require([_LT_DECL_SED])dnl
-AC_LINK_IFELSE(AC_LANG_PROGRAM,[
+AC_LINK_IFELSE([AC_LANG_PROGRAM],[
 lt_aix_libpath_sed='
     /Import File Strings/,/^$/ {
 	/^0/ {
@@ -1110,7 +1110,7 @@ fi
 # Invoke $ECHO with all args, space-separated.
 func_echo_all ()
 {
-    $ECHO "$*" 
+    $ECHO "$*"
 }
 
 case "$ECHO" in
@@ -4775,7 +4775,7 @@ _LT_EOF
 	# implicitly export all symbols.
         save_LDFLAGS="$LDFLAGS"
         LDFLAGS="$LDFLAGS -shared ${wl}-exported_symbol ${wl}foo ${wl}-update_registry ${wl}/dev/null"
-        AC_LINK_IFELSE(int foo(void) {},
+        AC_LINK_IFELSE([AC_LANG_SOURCE([int foo(void) {}])],
           _LT_TAGVAR(archive_expsym_cmds, $1)='$CC -shared $libobjs $deplibs $compiler_flags ${wl}-soname ${wl}$soname `test -n "$verstring" && func_echo_all "${wl}-set_version ${wl}$verstring"` ${wl}-update_registry ${wl}${output_objdir}/so_locations ${wl}-exports_file ${wl}$export_symbols -o $lib'
         )
         LDFLAGS="$save_LDFLAGS"
