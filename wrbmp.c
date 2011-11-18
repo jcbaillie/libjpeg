@@ -19,7 +19,7 @@
 
 #include "cdjpeg.h"		/* Common decls for cjpeg/djpeg applications */
 
-#ifdef LIBJPEG_BMP_SUPPORTED
+#ifdef BMP_SUPPORTED
 
 
 /*
@@ -439,4 +439,4 @@ jinit_write_bmp (j_decompress_ptr cinfo, boolean is_os2)
   return (djpeg_dest_ptr) dest;
 }
 
-#endif /* LIBJPEG_BMP_SUPPORTED */
+#endif /* BMP_SUPPORTED */

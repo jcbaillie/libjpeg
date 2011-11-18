@@ -1,168 +1,318 @@
-m4_pattern_forbid([^AX_])
+# IJG auto-configuration source file.
+# Process this file with autoconf to produce a configure script.
 
-AC_INIT([libjpeg], [6b])
-AC_CONFIG_AUX_DIR([build-aux])
+#
+# Configure script for IJG libjpeg
+#
 
-AM_INIT_AUTOMAKE([1.11.1 foreign build-aux/ansi2knr silent-rules])
+AC_INIT([libjpeg], [8.4.0])
+
+# Directory where autotools helper scripts lives.
+AC_CONFIG_AUX_DIR([.])
+
+# Generate configuration headers.
+AC_CONFIG_HEADERS([jconfig.h:jconfig.cfg])
+
+# Hack: disable autoheader so that it doesn't overwrite our cfg template.
+AUTOHEADER="echo autoheader ignored"
+
+# Check system type
+AC_CANONICAL_TARGET
+
+# Initialize Automake
+# Don't require all the GNU mandated files
+AM_INIT_AUTOMAKE([-Wall -Werror ansi2knr no-dist foreign])
+
+# Make --enable-silent-rules the default.
+# To get verbose build output you may configure
+# with --disable-silent-rules or use "make V=1".
 AM_SILENT_RULES([yes])
 
-AC_ARG_ENABLE([cflags],
-              [AC_HELP_STRING([--with-cflags=FLAGS],
-                              [additional compiler flags])],
-              [CFLAGS="$CFLAGS $enable_cflags"])
-
-AC_ARG_ENABLE([ldflags],
-              [AC_HELP_STRING([--with-ldflags=FLAGS],
-                              [additional linker flags])],
-              [LDFLAGS="$LDFLAGS $enable_ldflags"])
-
-AC_ARG_ENABLE([library],
-	      [AC_HELP_STRING([--disable-library],
-			      [just install the programs, not the library])],
-	      [], [enable_library=yes])
-AM_CONDITIONAL([INSTALL_LIBRARY], [test x"$enable_library" == xyes])
-
-AC_ARG_ENABLE([programs],
-	      [AC_HELP_STRING([--disable-programs],
-			      [just build the library, not the programs])],
-	      [], [enable_programs=yes])
-AM_CONDITIONAL([PROGRAMS], [test x"$enable_programs" == xyes])
-
-AC_PROG_CC
-AC_CHECK_TYPES([unsigned char, unsigned short])
+# This is required when using the de-ANSI-fication feature.
 AM_C_PROTOTYPES
 
-AC_CHECK_HEADERS([stddef.h stdlib.h])
-AH_TEMPLATE([NEED_SYS_TYPES_H],
-  [Define this if your system does not provide typedef size_t in any of the
-   ANSI-standard places (stddef.h, stdlib.h, or stdio.h), but places it in
-   <sys/types.h> instead.])
+# Add configure option --enable-maintainer-mode which enables
+# dependency checking and generation useful to package maintainers.
+# This is made an option to avoid confusing end users.
+AM_MAINTAINER_MODE
 
-AH_TEMPLATE([NEED_FAR_POINTERS],
-  [For 80x86 machines, you need to define NEED_FAR_POINTERS,
-   unless you are using a large-data memory model or 80386 flat-memory mode.
-   On less brain-damaged CPUs this symbol must not be defined.
-   (Defining this symbol causes large data structures to be referenced through
-   "far" pointers and to be allocated with a special version of malloc.)])
+# Check for programs
+AC_PROG_CC
+AC_PROG_CC_STDC
+AC_PROG_CPP
+AC_PROG_INSTALL
+AC_PROG_MAKE_SET
+AC_PROG_LN_S
 
-AH_TEMPLATE([NEED_SHORT_EXTERNAL_NAMES],
-  [Define this if your linker needs global names to be unique in less
-   than the first 15 characters.])
+# Check if LD supports linker scripts,
+# and define automake conditional HAVE_LD_VERSION_SCRIPT if so.
+AC_ARG_ENABLE([ld-version-script],
+  AS_HELP_STRING([--enable-ld-version-script],
+    [enable linker version script (default is enabled when possible)]),
+    [have_ld_version_script=$enableval], [])
+if test -z "$have_ld_version_script"; then
+  AC_MSG_CHECKING([if LD -Wl,--version-script works])
+  save_LDFLAGS="$LDFLAGS"
+  LDFLAGS="$LDFLAGS -Wl,--version-script=conftest.map"
+  cat > conftest.map <<EOF
+VERS_1 {
+        global: sym;
+};
 
-AH_TEMPLATE([INCOMPLETE_TYPES_BROKEN],
-  [Although a real ANSI C compiler can deal perfectly well with pointers to
-   unspecified structures (see "incomplete types" in the spec), a few pre-ANSI
-   and pseudo-ANSI compilers get confused.  To keep one of these bozos happy,
-   define INCOMPLETE_TYPES_BROKEN.  This is not recommended unless you
-   actually get "missing structure definition" warnings or errors while
-   compiling the JPEG code.])
+VERS_2 {
+        global: sym;
+} VERS_1;
+EOF
+  AC_LINK_IFELSE([AC_LANG_PROGRAM([], [])],
+                 [have_ld_version_script=yes], [have_ld_version_script=no])
+  rm -f conftest.map
+  LDFLAGS="$save_LDFLAGS"
+  AC_MSG_RESULT($have_ld_version_script)
+fi
+AM_CONDITIONAL(HAVE_LD_VERSION_SCRIPT, test "$have_ld_version_script" = "yes")
 
-AH_BOTTOM([
-/*
- * The following options affect code selection within the JPEG library,
- * but they don't need to be visible to applications using the library.
- * To minimize application namespace pollution, the symbols won't be
- * defined unless JPEG_INTERNALS has been defined.
- */
+# See if compiler supports prototypes.
+AC_MSG_CHECKING(for function prototypes)
+AC_CACHE_VAL(ijg_cv_have_prototypes,
+[AC_TRY_COMPILE([
+int testfunction (int arg1, int * arg2); /* check prototypes */
+struct methods_struct {		/* check method-pointer declarations */
+  int (*error_exit) (char *msgtext);
+  int (*trace_message) (char *msgtext);
+  int (*another_method) (void);
+};
+int testfunction (int arg1, int * arg2) /* check definitions */
+{ return arg2[arg1]; }
+int test2function (void)	/* check void arg list */
+{ return 0; }
+], [ ], ijg_cv_have_prototypes=yes, ijg_cv_have_prototypes=no)])
+AC_MSG_RESULT($ijg_cv_have_prototypes)
+if test $ijg_cv_have_prototypes = yes; then
+  AC_DEFINE([HAVE_PROTOTYPES],[1],[Compiler supports function prototypes.])
+else
+  echo Your compiler does not seem to know about function prototypes.
+  echo Perhaps it needs a special switch to enable ANSI C mode.
+  echo If so, we recommend running configure like this:
+  echo "   ./configure  CC='cc -switch'"
+  echo where -switch is the proper switch.
+fi
 
-#ifdef JPEG_INTERNALS
+# Check header files
+AC_CHECK_HEADERS(stddef.h stdlib.h locale.h)
+AC_CHECK_HEADER(string.h, , AC_DEFINE([NEED_BSD_STRINGS],[1],[Compiler has <strings.h> rather than standard <string.h>.]))
 
-/* Define this if your compiler implements ">>" on signed values as a logical
- * (unsigned) shift; leave it undefined if ">>" is a signed (arithmetic) shift,
- * which is the normal and rational definition.
- */
-# undef RIGHT_SHIFT_IS_UNSIGNED
+# See whether type size_t is defined in any ANSI-standard places;
+# if not, perhaps it is defined in <sys/types.h>.
+AC_MSG_CHECKING(for size_t)
+AC_TRY_COMPILE([
+#ifdef HAVE_STDDEF_H
+#include <stddef.h>
+#endif
+#ifdef HAVE_STDLIB_H
+#include <stdlib.h>
+#endif
+#include <stdio.h>
+#ifdef NEED_BSD_STRINGS
+#include <strings.h>
+#else
+#include <string.h>
+#endif
+typedef size_t my_size_t;
+], [ my_size_t foovar; ], ijg_size_t_ok=yes,
+[ijg_size_t_ok="not ANSI, perhaps it is in sys/types.h"])
+AC_MSG_RESULT($ijg_size_t_ok)
+if test "$ijg_size_t_ok" != yes; then
+AC_CHECK_HEADER(sys/types.h, [AC_DEFINE([NEED_SYS_TYPES_H],[1],[Need to include <sys/types.h> in order to obtain size_t.])
+AC_EGREP_CPP(size_t, [#include <sys/types.h>],
+[ijg_size_t_ok="size_t is in sys/types.h"], ijg_size_t_ok=no)],
+ijg_size_t_ok=no)
+AC_MSG_RESULT($ijg_size_t_ok)
+if test "$ijg_size_t_ok" = no; then
+  echo Type size_t is not defined in any of the usual places.
+  echo Try putting '"typedef unsigned int size_t;"' in jconfig.h.
+fi
+fi
 
+# Check compiler characteristics
+AC_MSG_CHECKING(for type unsigned char)
+AC_TRY_COMPILE(, [ unsigned char un_char; ],
+[AC_MSG_RESULT(yes)
+AC_DEFINE([HAVE_UNSIGNED_CHAR],[1],[Compiler supports 'unsigned char'.])], AC_MSG_RESULT(no))
+dnl
+AC_MSG_CHECKING(for type unsigned short)
+AC_TRY_COMPILE(, [ unsigned short un_short; ],
+[AC_MSG_RESULT(yes)
+AC_DEFINE([HAVE_UNSIGNED_SHORT],[1],[Compiler supports 'unsigned short'.])], AC_MSG_RESULT(no))
+dnl
+AC_MSG_CHECKING(for type void)
+AC_TRY_COMPILE([
+/* Caution: a C++ compiler will insist on valid prototypes */
+typedef void * void_ptr;	/* check void * */
+#ifdef HAVE_PROTOTYPES		/* check ptr to function returning void */
+typedef void (*void_func) (int a, int b);
+#else
+typedef void (*void_func) ();
+#endif
 
-#endif /* JPEG_INTERNALS */
+#ifdef HAVE_PROTOTYPES		/* check void function result */
+void test3function (void_ptr arg1, void_func arg2)
+#else
+void test3function (arg1, arg2)
+     void_ptr arg1;
+     void_func arg2;
+#endif
+{
+  char * locptr = (char *) arg1; /* check casting to and from void * */
+  arg1 = (void *) locptr;
+  (*arg2) (1, 2);		/* check call of fcn returning void */
+}
+], [ ], AC_MSG_RESULT(yes), [AC_MSG_RESULT(no)
+AC_DEFINE([void],[char],[Define 'void' as 'char' for archaic compilers that don't understand it.])])
+AC_C_CONST
 
+# Check for non-broken inline under various spellings
+AC_MSG_CHECKING(for inline)
+ijg_cv_inline=""
+AC_TRY_COMPILE(, [} __inline__ int foo() { return 0; }
+int bar() { return foo();], ijg_cv_inline="__inline__",
+AC_TRY_COMPILE(, [} __inline int foo() { return 0; }
+int bar() { return foo();], ijg_cv_inline="__inline",
+AC_TRY_COMPILE(, [} inline int foo() { return 0; }
+int bar() { return foo();], ijg_cv_inline="inline")))
+AC_MSG_RESULT($ijg_cv_inline)
+AC_DEFINE_UNQUOTED([INLINE],[$ijg_cv_inline],[How to obtain function inlining.])
 
-/*
- * The remaining options do not affect the JPEG library proper,
- * but only the sample applications cjpeg/djpeg (see cjpeg.c, djpeg.c).
- * Other applications can ignore these.
- */
+# We cannot check for bogus warnings, but at least we can check for errors
+AC_MSG_CHECKING(for broken incomplete types)
+AC_TRY_COMPILE([ typedef struct undefined_structure * undef_struct_ptr; ], ,
+AC_MSG_RESULT(ok),
+[AC_MSG_RESULT(broken)
+AC_DEFINE([INCOMPLETE_TYPES_BROKEN],[1],[Compiler does not support pointers to unspecified structures.])])
 
-#ifdef JPEG_CJPEG_DJPEG
+# Test whether global names are unique to at least 15 chars
+AC_MSG_CHECKING(for short external names)
+AC_TRY_LINK([
+int possibly_duplicate_function () { return 0; }
+int possibly_dupli_function () { return 1; }
+], [ ], AC_MSG_RESULT(ok), [AC_MSG_RESULT(short)
+AC_DEFINE([NEED_SHORT_EXTERNAL_NAMES],[1],[Linker requires that global names be unique in first 15 characters.])])
 
-/* These defines indicate which image (non-JPEG) file formats are allowed. */
-
-/* Define if BMP image file format is supported. */
-# undef BMP_SUPPORTED
-
-/* Define if GIF image file format is supported. */
-# undef GIF_SUPPORTED
-
-/* Define if PBMPLUS PPM/PGM image file format is supported. */
-# undef PPM_SUPPORTED
-
-/* Define if Utah RLE image file format is supported. */
-# undef RLE_SUPPORTED
-
-/* Define if Targa image file format is supported. */
-# undef TARGA_SUPPORTED
-
-
-
-/* Define this if you want to name both input and output files on the command
- * line, rather than using stdout and optionally stdin.  You MUST do this if
- * your system can't cope with binary I/O to stdin/stdout.  See comments at
- * head of cjpeg.c or djpeg.c.
- */
-# undef TWO_FILE_COMMANDLINE
-
-/* Define this if your system needs explicit cleanup of temporary files.
- * This is crucial under MS-DOS, where the temporary "files" may be areas
- * of extended memory; on most other systems it's not as important.
- */
-# undef NEED_SIGNAL_CATCHER
-
-/* By default, we open image files with fopen(...,"rb") or fopen(...,"wb").
- * This is necessary on systems that distinguish text files from binary files,
- * and is harmless on most systems that don't.  If you have one of the rare
- * systems that complains about the "b" spec, define this symbol.
- */
-# undef DONT_USE_B_MODE
-
-/* Define this if you want percent-done progress reports from cjpeg/djpeg.
- */
-# undef PROGRESS_REPORT
-
-#endif /* JPEG_CJPEG_DJPEG */
-
-/*
- * Local] [Variables:
- * mode: C
- * End:
- */
+# Run-time checks
+AC_MSG_CHECKING(to see if char is signed)
+AC_TRY_RUN([
+#ifdef HAVE_PROTOTYPES
+int is_char_signed (int arg)
+#else
+int is_char_signed (arg)
+     int arg;
+#endif
+{
+  if (arg == 189) {		/* expected result for unsigned char */
+    return 0;			/* type char is unsigned */
+  }
+  else if (arg != -67) {	/* expected result for signed char */
+    printf("Hmm, it seems 'char' is not eight bits wide on your machine.\n");
+    printf("I fear the JPEG software will not work at all.\n\n");
+  }
+  return 1;			/* assume char is signed otherwise */
+}
+char signed_char_check = (char) (-67);
+int main() {
+  exit(is_char_signed((int) signed_char_check));
+}], [AC_MSG_RESULT(no)
+AC_DEFINE([CHAR_IS_UNSIGNED],[1],[Characters are unsigned])], AC_MSG_RESULT(yes),
+[echo Assuming that char is signed on target machine.
+echo If it is unsigned, this will be a little bit inefficient.
 ])
+dnl
+AC_MSG_CHECKING(to see if right shift is signed)
+AC_TRY_RUN([
+#ifdef HAVE_PROTOTYPES
+int is_shifting_signed (long arg)
+#else
+int is_shifting_signed (arg)
+     long arg;
+#endif
+/* See whether right-shift on a long is signed or not. */
+{
+  long res = arg >> 4;
 
-# Put here the object file name for the correct system-dependent memory
-# manager file.  For Unix this is usually jmemnobs.c, but you may want
-# to use jmemansi.c or jmemname.c if you have limited swap space.
-# Possible values: see SYSDEPSOURCES in Makefile.am.
-AC_CANONICAL_HOST
-case $host in
-  *) SYSDEPMEM='jmemnobs.lo';;
-esac
-AC_SUBST([SYSDEPMEM])
+  if (res == -0x7F7E80CL) {	/* expected result for signed shift */
+    return 1;			/* right shift is signed */
+  }
+  /* see if unsigned-shift hack will fix it. */
+  /* we can't just test exact value since it depends on width of long... */
+  res |= (~0L) << (32-4);
+  if (res == -0x7F7E80CL) {	/* expected result now? */
+    return 0;			/* right shift is unsigned */
+  }
+  printf("Right shift isn't acting as I expect it to.\n");
+  printf("I fear the JPEG software will not work at all.\n\n");
+  return 0;			/* try it with unsigned anyway */
+}
+int main() {
+  exit(is_shifting_signed(-0x7F7E80B1L));
+}], [AC_MSG_RESULT(no)
+AC_DEFINE([RIGHT_SHIFT_IS_UNSIGNED],[1],[Broken compiler shifts signed values as an unsigned shift.])], AC_MSG_RESULT(yes),
+AC_MSG_RESULT(Assuming that right shift is signed on target machine.))
+dnl
+AC_MSG_CHECKING(to see if fopen accepts b spec)
+AC_TRY_RUN([
+#include <stdio.h>
+int main() {
+  if (fopen("conftestdata", "wb") != NULL)
+    exit(0);
+  exit(1);
+}], AC_MSG_RESULT(yes), [AC_MSG_RESULT(no)
+AC_DEFINE([DONT_USE_B_MODE],[1],[Don't open files in binary mode.])],
+AC_MSG_RESULT(Assuming that it does.))
 
-# The name of the library to build (not including the "lib" prefix).
-# Defaults to its original name, but can be changed to another name to
-# avoid conflicts.
-: ${LIBJPEG_NAME=jpeg}
-AC_SUBST([LIBJPEG_NAME])
-
-# An extension to the library.  Can be empty, or, for instance, "-debug".
-AC_SUBST([LIBSFX])
-
-
-AC_DISABLE_STATIC
+# Configure libtool
+AC_LIBTOOL_WIN32_DLL
 AC_PROG_LIBTOOL
-URBI_LIBTOOL
 
-AC_CONFIG_HEADERS([config.h:config.hin])
-AX_PREFIX_CONFIG_H([jconfig.h])
+# Select memory manager depending on user input.
+# If no "-enable-maxmem", use jmemnobs
+MEMORYMGR='jmemnobs'
+MAXMEM="no"
+AC_ARG_ENABLE(maxmem,
+[  --enable-maxmem[=N]     enable use of temp files, set max mem usage to N MB],
+MAXMEM="$enableval")
+dnl [# support --with-maxmem for backwards compatibility with IJG V5.]
+dnl AC_ARG_WITH(maxmem, , MAXMEM="$withval")
+if test "x$MAXMEM" = xyes; then
+  MAXMEM=1
+fi
+if test "x$MAXMEM" != xno; then
+  if test -n "`echo $MAXMEM | sed 's/[[0-9]]//g'`"; then
+    AC_MSG_ERROR(non-numeric argument to --enable-maxmem)
+  fi
+  DEFAULTMAXMEM=`expr $MAXMEM \* 1048576`
+AC_DEFINE_UNQUOTED([DEFAULT_MAX_MEM], [${DEFAULTMAXMEM}], [Maximum data space library will allocate.])
+AC_MSG_CHECKING([for 'tmpfile()'])
+AC_TRY_LINK([#include <stdio.h>], [ FILE * tfile = tmpfile(); ],
+[AC_MSG_RESULT(yes)
+MEMORYMGR='jmemansi'],
+[AC_MSG_RESULT(no)
+dnl if tmpfile is not present, must use jmemname.
+MEMORYMGR='jmemname'
+
+# Test for the need to remove temporary files using a signal handler (for cjpeg/djpeg)
+AC_DEFINE([NEED_SIGNAL_CATCHER],[1],[Need signal handler to clean up temporary files.])
+AC_MSG_CHECKING([for 'mktemp()'])
+AC_TRY_LINK(, [ char fname[80]; mktemp(fname); ], AC_MSG_RESULT(yes),
+[AC_MSG_RESULT(no)
+AC_DEFINE([NO_MKTEMP],[1],[The mktemp() function is not available.])])])
+fi
+AC_SUBST(MEMORYMGR)
+
+# Extract the library version IDs from jpeglib.h.
+AC_MSG_CHECKING([libjpeg version number])
+[JPEG_LIB_VERSION_MAJOR=`sed -e '/^#define JPEG_LIB_VERSION_MAJOR/!d' -e 's/^[^0-9]*\([0-9][0-9]*\).*$/\1/' $srcdir/jpeglib.h`]
+[JPEG_LIB_VERSION_MINOR=`sed -e '/^#define JPEG_LIB_VERSION_MINOR/!d' -e 's/^[^0-9]*\([0-9][0-9]*\).*$/\1/' $srcdir/jpeglib.h`]
+[JPEG_LIB_VERSION="`expr $JPEG_LIB_VERSION_MAJOR + $JPEG_LIB_VERSION_MINOR`:0:$JPEG_LIB_VERSION_MINOR"]
+AC_MSG_RESULT([$JPEG_LIB_VERSION])
+AC_SUBST([JPEG_LIB_VERSION])
+
 AC_CONFIG_FILES([Makefile])
-
 AC_OUTPUT

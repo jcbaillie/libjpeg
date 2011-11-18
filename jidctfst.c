@@ -137,7 +137,7 @@
  * We assume that int right shift is unsigned if INT32 right shift is.
  */
 
-#ifdef LIBJPEG_RIGHT_SHIFT_IS_UNSIGNED
+#ifdef RIGHT_SHIFT_IS_UNSIGNED
 #define ISHIFT_TEMPS	DCTELEM ishift_temp;
 #if BITS_IN_JSAMPLE == 8
 #define DCTELEMBITS  16		/* DCTELEM may be 16 or 32 bits */

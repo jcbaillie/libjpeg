@@ -2,6 +2,7 @@
  * djpeg.c
  *
  * Copyright (C) 1991-1997, Thomas G. Lane.
+ * Modified 2009 by Guido Vollbeding.
  * This file is part of the Independent JPEG Group's software.
  * For conditions of distribution and use, see the accompanying README file.
  *
@@ -9,7 +10,7 @@
  * It should work on any system with Unix- or MS-DOS-style command lines.
  *
  * Two different command line styles are permitted, depending on the
- * compile-time switch LIBJPEG_TWO_FILE_COMMANDLINE:
+ * compile-time switch TWO_FILE_COMMANDLINE:
  *	djpeg [options]  inputfile outputfile
  *	djpeg [options]  [inputfile]
  * In the second style, output is always to standard output, which you'd
@@ -29,13 +30,13 @@
 #include <ctype.h>		/* to declare isprint() */
 
 #ifdef USE_CCOMMAND		/* command-line reader for Macintosh */
-# ifdef __MWERKS__
-#  include <SIOUX.h>              /* Metrowerks needs this */
-#  include <console.h>		/* ... and this */
-# endif
-# ifdef THINK_C
-#  include <console.h>		/* Think declares it here */
-# endif
+#ifdef __MWERKS__
+#include <SIOUX.h>              /* Metrowerks needs this */
+#include <console.h>		/* ... and this */
+#endif
+#ifdef THINK_C
+#include <console.h>		/* Think declares it here */
+#endif
 #endif
 
 
@@ -53,7 +54,7 @@ static const char * const cdjpeg_message_table[] = {
  * This list defines the known output image formats
  * (not all of which need be supported by a given version).
  * You can change the default output format by defining DEFAULT_FMT;
- * indeed, you had better do so if you undefine LIBJPEG_PPM_SUPPORTED.
+ * indeed, you had better do so if you undefine PPM_SUPPORTED.
  */
 
 typedef enum {
@@ -67,7 +68,7 @@ typedef enum {
 } IMAGE_FORMATS;
 
 #ifndef DEFAULT_FMT		/* so can override from CFLAGS in Makefile */
-# define DEFAULT_FMT	FMT_PPM
+#define DEFAULT_FMT	FMT_PPM
 #endif
 
 static IMAGE_FORMATS requested_fmt;
@@ -91,7 +92,7 @@ usage (void)
 /* complain about bad command line */
 {
   fprintf(stderr, "usage: %s [switches] ", progname);
-#ifdef LIBJPEG_TWO_FILE_COMMANDLINE
+#ifdef TWO_FILE_COMMANDLINE
   fprintf(stderr, "inputfile outputfile\n");
 #else
   fprintf(stderr, "[inputfile]\n");
@@ -104,30 +105,27 @@ usage (void)
 #ifdef IDCT_SCALING_SUPPORTED
   fprintf(stderr, "  -scale M/N     Scale output image by fraction M/N, eg, 1/8\n");
 #endif
-#ifdef LIBJPEG_BMP_SUPPORTED
+#ifdef BMP_SUPPORTED
   fprintf(stderr, "  -bmp           Select BMP output format (Windows style)%s\n",
 	  (DEFAULT_FMT == FMT_BMP ? " (default)" : ""));
 #endif
-#ifdef LIBJPEG_GIF_SUPPORTED
+#ifdef GIF_SUPPORTED
   fprintf(stderr, "  -gif           Select GIF output format%s\n",
 	  (DEFAULT_FMT == FMT_GIF ? " (default)" : ""));
 #endif
-#ifdef LIBJPEG_BMP_SUPPORTED
+#ifdef BMP_SUPPORTED
   fprintf(stderr, "  -os2           Select BMP output format (OS/2 style)%s\n",
 	  (DEFAULT_FMT == FMT_OS2 ? " (default)" : ""));
 #endif
-#ifdef LIBJPEG_PPM_SUPPORTED
-#ifdef  __GNUC__
-#warning IT IS DEFINED
-#endif
+#ifdef PPM_SUPPORTED
   fprintf(stderr, "  -pnm           Select PBMPLUS (PPM/PGM) output format%s\n",
 	  (DEFAULT_FMT == FMT_PPM ? " (default)" : ""));
 #endif
-#ifdef LIBJPEG_RLE_SUPPORTED
+#ifdef RLE_SUPPORTED
   fprintf(stderr, "  -rle           Select Utah RLE output format%s\n",
 	  (DEFAULT_FMT == FMT_RLE ? " (default)" : ""));
 #endif
-#ifdef LIBJPEG_TARGA_SUPPORTED
+#ifdef TARGA_SUPPORTED
   fprintf(stderr, "  -targa         Select Targa output format%s\n",
 	  (DEFAULT_FMT == FMT_TARGA ? " (default)" : ""));
 #endif
@@ -330,7 +328,7 @@ parse_switches (j_decompress_ptr cinfo, int argc, char **argv,
       if (++argn >= argc)	/* advance to next argument */
 	usage();
       if (sscanf(argv[argn], "%d/%d",
-		 &cinfo->scale_num, &cinfo->scale_denom) != 2)
+		 &cinfo->scale_num, &cinfo->scale_denom) < 1)
 	usage();
 
     } else if (keymatch(arg, "targa", 1)) {
@@ -428,7 +426,7 @@ main (int argc, char **argv)
 {
   struct jpeg_decompress_struct cinfo;
   struct jpeg_error_mgr jerr;
-#ifdef LIBJPEG_PROGRESS_REPORT
+#ifdef PROGRESS_REPORT
   struct cdjpeg_progress_mgr progress;
 #endif
   int file_index;
@@ -464,7 +462,7 @@ main (int argc, char **argv)
   jpeg_set_marker_processor(&cinfo, JPEG_APP0+12, print_text_marker);
 
   /* Now safe to enable signal catcher. */
-#ifdef LIBJPEG_NEED_SIGNAL_CATCHER
+#ifdef NEED_SIGNAL_CATCHER
   enable_signal_catcher((j_common_ptr) &cinfo);
 #endif
 
@@ -478,7 +476,7 @@ main (int argc, char **argv)
 
   file_index = parse_switches(&cinfo, argc, argv, 0, FALSE);
 
-#ifdef LIBJPEG_TWO_FILE_COMMANDLINE
+#ifdef TWO_FILE_COMMANDLINE
   /* Must have either -outfile switch or explicit output file name */
   if (outfilename == NULL) {
     if (file_index != argc-2) {
@@ -500,7 +498,7 @@ main (int argc, char **argv)
     fprintf(stderr, "%s: only one input file\n", progname);
     usage();
   }
-#endif /* LIBJPEG_TWO_FILE_COMMANDLINE */
+#endif /* TWO_FILE_COMMANDLINE */
 
   /* Open the input file. */
   if (file_index < argc) {
@@ -524,7 +522,7 @@ main (int argc, char **argv)
     output_file = write_stdout();
   }
 
-#ifdef LIBJPEG_PROGRESS_REPORT
+#ifdef PROGRESS_REPORT
   start_progress_monitor((j_common_ptr) &cinfo, &progress);
 #endif
 
@@ -541,7 +539,7 @@ main (int argc, char **argv)
    * option settings (for instance, GIF wants to force color quantization).
    */
   switch (requested_fmt) {
-#ifdef LIBJPEG_BMP_SUPPORTED
+#ifdef BMP_SUPPORTED
   case FMT_BMP:
     dest_mgr = jinit_write_bmp(&cinfo, FALSE);
     break;
@@ -549,22 +547,22 @@ main (int argc, char **argv)
     dest_mgr = jinit_write_bmp(&cinfo, TRUE);
     break;
 #endif
-#ifdef LIBJPEG_GIF_SUPPORTED
+#ifdef GIF_SUPPORTED
   case FMT_GIF:
     dest_mgr = jinit_write_gif(&cinfo);
     break;
 #endif
-#ifdef LIBJPEG_PPM_SUPPORTED
+#ifdef PPM_SUPPORTED
   case FMT_PPM:
     dest_mgr = jinit_write_ppm(&cinfo);
     break;
 #endif
-#ifdef LIBJPEG_RLE_SUPPORTED
+#ifdef RLE_SUPPORTED
   case FMT_RLE:
     dest_mgr = jinit_write_rle(&cinfo);
     break;
 #endif
-#ifdef LIBJPEG_TARGA_SUPPORTED
+#ifdef TARGA_SUPPORTED
   case FMT_TARGA:
     dest_mgr = jinit_write_targa(&cinfo);
     break;
@@ -588,7 +586,7 @@ main (int argc, char **argv)
     (*dest_mgr->put_pixel_rows) (&cinfo, dest_mgr, num_scanlines);
   }
 
-#ifdef LIBJPEG_PROGRESS_REPORT
+#ifdef PROGRESS_REPORT
   /* Hack: count final pass as done in case finish_output does an extra pass.
    * The library won't have updated completed_passes.
    */
@@ -609,7 +607,7 @@ main (int argc, char **argv)
   if (output_file != stdout)
     fclose(output_file);
 
-#ifdef LIBJPEG_PROGRESS_REPORT
+#ifdef PROGRESS_REPORT
   end_progress_monitor((j_common_ptr) &cinfo);
 #endif
 

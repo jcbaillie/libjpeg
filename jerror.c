@@ -25,10 +25,7 @@
 #include "jerror.h"
 
 #ifdef USE_WINDOWS_MESSAGEBOX
-# ifndef _WIN32_WINNT
-#  define _WIN32_WINNT 0x0400
-# endif
-# include <windows.h>
+#include <windows.h>
 #endif
 
 #ifndef EXIT_FAILURE		/* define exit() codes if not provided */
@@ -44,7 +41,7 @@
  * want to refer to it directly.
  */
 
-#ifdef LIBJPEG_NEED_SHORT_EXTERNAL_NAMES
+#ifdef NEED_SHORT_EXTERNAL_NAMES
 #define jpeg_std_message_table	jMsgTable
 #endif
 

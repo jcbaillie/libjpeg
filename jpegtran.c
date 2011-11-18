@@ -1,14 +1,14 @@
 /*
  * jpegtran.c
  *
- * Copyright (C) 1995-2001, Thomas G. Lane.
+ * Copyright (C) 1995-2011, Thomas G. Lane, Guido Vollbeding.
  * This file is part of the Independent JPEG Group's software.
  * For conditions of distribution and use, see the accompanying README file.
  *
  * This file contains a command-line user interface for JPEG transcoding.
- * It is very similar to cjpeg.c, but provides lossless transcoding between
- * different JPEG file formats.  It also provides some lossless and sort-of-
- * lossless transformations of JPEG data.
+ * It is very similar to cjpeg.c, and partly to djpeg.c, but provides
+ * lossless transcoding between different JPEG file formats.  It also
+ * provides some lossless and sort-of-lossless transformations of JPEG data.
  */
 
 #include "cdjpeg.h"		/* Common decls for cjpeg/djpeg applications */
@@ -37,6 +37,7 @@
 
 static const char * progname;	/* program name for error messages */
 static char * outfilename;	/* for -outfile switch */
+static char * scaleoption;	/* -scale switch */
 static JCOPY_OPTION copyoption;	/* -copy switch */
 static jpeg_transform_info transformoption; /* image transformation options */
 
@@ -46,7 +47,7 @@ usage (void)
 /* complain about bad command line */
 {
   fprintf(stderr, "usage: %s [switches] ", progname);
-#ifdef LIBJPEG_TWO_FILE_COMMANDLINE
+#ifdef TWO_FILE_COMMANDLINE
   fprintf(stderr, "inputfile outputfile\n");
 #else
   fprintf(stderr, "[inputfile]\n");
@@ -62,26 +63,29 @@ usage (void)
 #ifdef C_PROGRESSIVE_SUPPORTED
   fprintf(stderr, "  -progressive   Create progressive JPEG file\n");
 #endif
-#if TRANSFORMS_SUPPORTED
   fprintf(stderr, "Switches for modifying the image:\n");
+#if TRANSFORMS_SUPPORTED
   fprintf(stderr, "  -crop WxH+X+Y  Crop to a rectangular subarea\n");
   fprintf(stderr, "  -grayscale     Reduce to grayscale (omit color data)\n");
   fprintf(stderr, "  -flip [horizontal|vertical]  Mirror image (left-right or top-bottom)\n");
   fprintf(stderr, "  -perfect       Fail if there is non-transformable edge blocks\n");
   fprintf(stderr, "  -rotate [90|180|270]         Rotate image (degrees clockwise)\n");
+#endif
+  fprintf(stderr, "  -scale M/N     Scale output image by fraction M/N, eg, 1/8\n");
+#if TRANSFORMS_SUPPORTED
   fprintf(stderr, "  -transpose     Transpose image\n");
   fprintf(stderr, "  -transverse    Transverse transpose image\n");
   fprintf(stderr, "  -trim          Drop non-transformable edge blocks\n");
-#endif /* TRANSFORMS_SUPPORTED */
+#endif
   fprintf(stderr, "Switches for advanced users:\n");
+#ifdef C_ARITH_CODING_SUPPORTED
+  fprintf(stderr, "  -arithmetic    Use arithmetic coding\n");
+#endif
   fprintf(stderr, "  -restart N     Set restart interval in rows, or in blocks with B\n");
   fprintf(stderr, "  -maxmemory N   Maximum memory to use (in kbytes)\n");
   fprintf(stderr, "  -outfile name  Specify name for output file\n");
   fprintf(stderr, "  -verbose  or  -debug   Emit debug output\n");
   fprintf(stderr, "Switches for wizards:\n");
-#ifdef C_ARITH_CODING_SUPPORTED
-  fprintf(stderr, "  -arithmetic    Use arithmetic coding\n");
-#endif
 #ifdef C_MULTISCAN_FILES_SUPPORTED
   fprintf(stderr, "  -scans file    Create multi-scan JPEG per script file\n");
 #endif
@@ -132,10 +136,11 @@ parse_switches (j_compress_ptr cinfo, int argc, char **argv,
   /* Set up default JPEG parameters. */
   simple_progressive = FALSE;
   outfilename = NULL;
+  scaleoption = NULL;
   copyoption = JCOPYOPT_DEFAULT;
   transformoption.transform = JXFORM_NONE;
-  transformoption.trim = FALSE;
   transformoption.perfect = FALSE;
+  transformoption.trim = FALSE;
   transformoption.force_grayscale = FALSE;
   transformoption.crop = FALSE;
   cinfo->err->trace_level = 0;
@@ -299,6 +304,13 @@ parse_switches (j_compress_ptr cinfo, int argc, char **argv,
       else
 	usage();
 
+    } else if (keymatch(arg, "scale", 4)) {
+      /* Scale the output image by a fraction M/N. */
+      if (++argn >= argc)	/* advance to next argument */
+	usage();
+      scaleoption = argv[argn];
+      /* We must postpone processing until decompression startup. */
+
     } else if (keymatch(arg, "scans", 1)) {
       /* Set scan script. */
 #ifdef C_MULTISCAN_FILES_SUPPORTED
@@ -359,7 +371,7 @@ main (int argc, char **argv)
   struct jpeg_decompress_struct srcinfo;
   struct jpeg_compress_struct dstinfo;
   struct jpeg_error_mgr jsrcerr, jdsterr;
-#ifdef LIBJPEG_PROGRESS_REPORT
+#ifdef PROGRESS_REPORT
   struct cdjpeg_progress_mgr progress;
 #endif
   jvirt_barray_ptr * src_coef_arrays;
@@ -389,7 +401,7 @@ main (int argc, char **argv)
   /* Now safe to enable signal catcher.
    * Note: we assume only the decompression object will have virtual arrays.
    */
-#ifdef LIBJPEG_NEED_SIGNAL_CATCHER
+#ifdef NEED_SIGNAL_CATCHER
   enable_signal_catcher((j_common_ptr) &srcinfo);
 #endif
 
@@ -405,7 +417,7 @@ main (int argc, char **argv)
   jsrcerr.trace_level = jdsterr.trace_level;
   srcinfo.mem->max_memory_to_use = dstinfo.mem->max_memory_to_use;
 
-#ifdef LIBJPEG_TWO_FILE_COMMANDLINE
+#ifdef TWO_FILE_COMMANDLINE
   /* Must have either -outfile switch or explicit output file name */
   if (outfilename == NULL) {
     if (file_index != argc-2) {
@@ -427,7 +439,7 @@ main (int argc, char **argv)
     fprintf(stderr, "%s: only one input file\n", progname);
     usage();
   }
-#endif /* LIBJPEG_TWO_FILE_COMMANDLINE */
+#endif /* TWO_FILE_COMMANDLINE */
 
   /* Open the input file. */
   if (file_index < argc) {
@@ -440,7 +452,7 @@ main (int argc, char **argv)
     fp = read_stdin();
   }
 
-#ifdef LIBJPEG_PROGRESS_REPORT
+#ifdef PROGRESS_REPORT
   start_progress_monitor((j_common_ptr) &dstinfo, &progress);
 #endif
 
@@ -453,20 +465,22 @@ main (int argc, char **argv)
   /* Read file header */
   (void) jpeg_read_header(&srcinfo, TRUE);
 
+  /* Adjust default decompression parameters */
+  if (scaleoption != NULL)
+    if (sscanf(scaleoption, "%d/%d",
+	&srcinfo.scale_num, &srcinfo.scale_denom) < 1)
+      usage();
+
   /* Any space needed by a transform option must be requested before
    * jpeg_read_coefficients so that memory allocation will be done right.
    */
 #if TRANSFORMS_SUPPORTED
-  /* Fails right away if -perfect is given and transformation is not perfect.
+  /* Fail right away if -perfect is given and transformation is not perfect.
    */
-  if (transformoption.perfect &&
-      !jtransform_perfect_transform(srcinfo.image_width, srcinfo.image_height,
-      srcinfo.max_h_samp_factor * DCTSIZE, srcinfo.max_v_samp_factor * DCTSIZE,
-      transformoption.transform)) {
+  if (!jtransform_request_workspace(&srcinfo, &transformoption)) {
     fprintf(stderr, "%s: transformation is not perfect\n", progname);
     exit(EXIT_FAILURE);
   }
-  jtransform_request_workspace(&srcinfo, &transformoption);
 #endif
 
   /* Read source file as DCT coefficients */
@@ -536,7 +550,7 @@ main (int argc, char **argv)
   if (fp != stdout)
     fclose(fp);
 
-#ifdef LIBJPEG_PROGRESS_REPORT
+#ifdef PROGRESS_REPORT
   end_progress_monitor((j_common_ptr) &dstinfo);
 #endif
 

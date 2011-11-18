@@ -2,6 +2,7 @@
  * wrppm.c
  *
  * Copyright (C) 1991-1996, Thomas G. Lane.
+ * Modified 2009 by Guido Vollbeding.
  * This file is part of the Independent JPEG Group's software.
  * For conditions of distribution and use, see the accompanying README file.
  *
@@ -17,7 +18,7 @@
 
 #include "cdjpeg.h"		/* Common decls for cjpeg/djpeg applications */
 
-#ifdef LIBJPEG_PPM_SUPPORTED
+#ifdef PPM_SUPPORTED
 
 
 /*
@@ -40,11 +41,11 @@
 #define BYTESPERSAMPLE 1
 #define PPM_MAXVAL 255
 #else
-/* The word-per-sample format always puts the LSB first. */
+/* The word-per-sample format always puts the MSB first. */
 #define PUTPPMSAMPLE(ptr,v)			\
 	{ register int val_ = v;		\
-	  *ptr++ = (char) (val_ & 0xFF);	\
 	  *ptr++ = (char) ((val_ >> 8) & 0xFF);	\
+	  *ptr++ = (char) (val_ & 0xFF);	\
 	}
 #define BYTESPERSAMPLE 2
 #define PPM_MAXVAL ((1<<BITS_IN_JSAMPLE)-1)
@@ -265,4 +266,4 @@ jinit_write_ppm (j_decompress_ptr cinfo)
   return (djpeg_dest_ptr) dest;
 }
 
-#endif /* LIBJPEG_PPM_SUPPORTED */
+#endif /* PPM_SUPPORTED */

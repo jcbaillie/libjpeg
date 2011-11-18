@@ -1,7 +1,8 @@
 /*
  * jmorecfg.h
  *
- * Copyright (C) 1991-1997, 2009, Thomas G. Lane.
+ * Copyright (C) 1991-1997, Thomas G. Lane.
+ * Modified 1997-2011 by Guido Vollbeding.
  * This file is part of the Independent JPEG Group's software.
  * For conditions of distribution and use, see the accompanying README file.
  *
@@ -54,12 +55,12 @@
  * You can use a signed char by having GETJSAMPLE mask it with 0xFF.
  */
 
-#ifdef LIBJPEG_HAVE_UNSIGNED_CHAR
+#ifdef HAVE_UNSIGNED_CHAR
 
 typedef unsigned char JSAMPLE;
 #define GETJSAMPLE(value)  ((int) (value))
 
-#else /* not LIBJPEG_HAVE_UNSIGNED_CHAR */
+#else /* not HAVE_UNSIGNED_CHAR */
 
 typedef char JSAMPLE;
 #ifdef CHAR_IS_UNSIGNED
@@ -68,7 +69,7 @@ typedef char JSAMPLE;
 #define GETJSAMPLE(value)  ((int) (value) & 0xFF)
 #endif /* CHAR_IS_UNSIGNED */
 
-#endif /* LIBJPEG_HAVE_UNSIGNED_CHAR */
+#endif /* HAVE_UNSIGNED_CHAR */
 
 #define MAXJSAMPLE	255
 #define CENTERJSAMPLE	128
@@ -105,12 +106,12 @@ typedef short JCOEF;
  * managers, this is also the data type passed to fread/fwrite.
  */
 
-#ifdef LIBJPEG_HAVE_UNSIGNED_CHAR
+#ifdef HAVE_UNSIGNED_CHAR
 
 typedef unsigned char JOCTET;
 #define GETJOCTET(value)  (value)
 
-#else /* not LIBJPEG_HAVE_UNSIGNED_CHAR */
+#else /* not HAVE_UNSIGNED_CHAR */
 
 typedef char JOCTET;
 #ifdef CHAR_IS_UNSIGNED
@@ -119,7 +120,7 @@ typedef char JOCTET;
 #define GETJOCTET(value)  ((value) & 0xFF)
 #endif /* CHAR_IS_UNSIGNED */
 
-#endif /* LIBJPEG_HAVE_UNSIGNED_CHAR */
+#endif /* HAVE_UNSIGNED_CHAR */
 
 
 /* These typedefs are used for various table entries and so forth.
@@ -131,23 +132,23 @@ typedef char JOCTET;
 
 /* UINT8 must hold at least the values 0..255. */
 
-#ifdef LIBJPEG_HAVE_UNSIGNED_CHAR
+#ifdef HAVE_UNSIGNED_CHAR
 typedef unsigned char UINT8;
-#else /* not LIBJPEG_HAVE_UNSIGNED_CHAR */
+#else /* not HAVE_UNSIGNED_CHAR */
 #ifdef CHAR_IS_UNSIGNED
 typedef char UINT8;
 #else /* not CHAR_IS_UNSIGNED */
 typedef short UINT8;
 #endif /* CHAR_IS_UNSIGNED */
-#endif /* LIBJPEG_HAVE_UNSIGNED_CHAR */
+#endif /* HAVE_UNSIGNED_CHAR */
 
 /* UINT16 must hold at least the values 0..65535. */
 
-#ifdef LIBJPEG_HAVE_UNSIGNED_SHORT
+#ifdef HAVE_UNSIGNED_SHORT
 typedef unsigned short UINT16;
-#else /* not LIBJPEG_HAVE_UNSIGNED_SHORT */
+#else /* not HAVE_UNSIGNED_SHORT */
 typedef unsigned int UINT16;
-#endif /* LIBJPEG_HAVE_UNSIGNED_SHORT */
+#endif /* HAVE_UNSIGNED_SHORT */
 
 /* INT16 must hold at least the values -32768..32767. */
 
@@ -158,7 +159,13 @@ typedef short INT16;
 /* INT32 must hold at least signed 32-bit values. */
 
 #ifndef XMD_H			/* X11/xmd.h correctly defines INT32 */
+#ifndef _BASETSD_H_		/* Microsoft defines it in basetsd.h */
+#ifndef _BASETSD_H		/* MinGW is slightly different */
+#ifndef QGLOBAL_H		/* Qt defines it in qglobal.h */
 typedef long INT32;
+#endif
+#endif
+#endif
 #endif
 
 /* Datatype used for image dimensions.  The JPEG standard only supports
@@ -171,22 +178,6 @@ typedef long INT32;
 typedef unsigned int JDIMENSION;
 
 #define JPEG_MAX_DIMENSION  65500L  /* a tad under 64K to prevent overflows */
-
-
-/* Handle the visibility of the symbols.  Under MSVC, export during
- * compilation, import when using them.
- */
-# ifdef _MSC_VER
-#  ifdef BUILDING_JPEG
-#   define JPEG_API __declspec(dllexport)
-#  else
-#   define JPEG_API __declspec(dllimport)
-#  endif
-# elif 2 < __GNUC__ || (__GNUC__ == 2 && 5 <= __GNUC_MINOR__)
-#  define JPEG_API __attribute__((visibility("default")))
-# else
-#  define JPEG_API
-# endif
 
 
 /* These macros are used in all function definitions and extern declarations.
@@ -203,7 +194,7 @@ typedef unsigned int JDIMENSION;
 /* a function referenced thru EXTERNs: */
 #define GLOBAL(type)		type
 /* a reference to a GLOBAL function: */
-#define EXTERN(type)		JPEG_API extern type
+#define EXTERN(type)		extern type
 
 
 /* This macro is used to declare a "method", that is, a function pointer.
@@ -212,7 +203,7 @@ typedef unsigned int JDIMENSION;
  * Again, you can customize this if you need special linkage keywords.
  */
 
-#ifdef LIBJPEG_PROTOTYPES
+#ifdef HAVE_PROTOTYPES
 #define JMETHOD(type,methodname,arglist)  type (*methodname) arglist
 #else
 #define JMETHOD(type,methodname,arglist)  type (*methodname) ()
@@ -222,13 +213,15 @@ typedef unsigned int JDIMENSION;
 /* Here is the pseudo-keyword for declaring pointers that must be "far"
  * on 80x86 machines.  Most of the specialized coding for 80x86 is handled
  * by just saying "FAR *" where such a pointer is needed.  In a few places
- * explicit coding is needed; see uses of the LIBJPEG_NEED_FAR_POINTERS symbol.
+ * explicit coding is needed; see uses of the NEED_FAR_POINTERS symbol.
  */
 
-#ifdef LIBJPEG_NEED_FAR_POINTERS
+#ifndef FAR
+#ifdef NEED_FAR_POINTERS
 #define FAR  far
 #else
 #define FAR
+#endif
 #endif
 
 
@@ -236,10 +229,10 @@ typedef unsigned int JDIMENSION;
  * On a few systems, type boolean and/or its values FALSE, TRUE may appear
  * in standard header files.  Or you may have conflicts with application-
  * specific header files that you want to include together with these files.
- * Defining LIBJPEG_HAVE_BOOLEAN before including jpeglib.h should make it work.
+ * Defining HAVE_BOOLEAN before including jpeglib.h should make it work.
  */
 
-#ifndef LIBJPEG_HAVE_BOOLEAN
+#ifndef HAVE_BOOLEAN
 typedef int boolean;
 #endif
 #ifndef FALSE			/* in case these macros already exist */
@@ -272,8 +265,6 @@ typedef int boolean;
  * (You may HAVE to do that if your compiler doesn't like null source files.)
  */
 
-/* Arithmetic coding is unsupported for legal reasons.  Complaints to IBM. */
-
 /* Capability options common to encoder and decoder: */
 
 #define DCT_ISLOW_SUPPORTED	/* slow but accurate integer algorithm */
@@ -282,9 +273,10 @@ typedef int boolean;
 
 /* Encoder capability options: */
 
-#undef  C_ARITH_CODING_SUPPORTED    /* Arithmetic coding back end? */
+#define C_ARITH_CODING_SUPPORTED    /* Arithmetic coding back end? */
 #define C_MULTISCAN_FILES_SUPPORTED /* Multiple-scan JPEG files? */
 #define C_PROGRESSIVE_SUPPORTED	    /* Progressive JPEG? (Requires MULTISCAN)*/
+#define DCT_SCALING_SUPPORTED	    /* Input rescaling via DCT? (Requires DCT_ISLOW)*/
 #define ENTROPY_OPT_SUPPORTED	    /* Optimization of entropy coding parms? */
 /* Note: if you selected 12-bit data precision, it is dangerous to turn off
  * ENTROPY_OPT_SUPPORTED.  The standard Huffman tables are only good for 8-bit
@@ -298,12 +290,12 @@ typedef int boolean;
 
 /* Decoder capability options: */
 
-#undef  D_ARITH_CODING_SUPPORTED    /* Arithmetic coding back end? */
+#define D_ARITH_CODING_SUPPORTED    /* Arithmetic coding back end? */
 #define D_MULTISCAN_FILES_SUPPORTED /* Multiple-scan JPEG files? */
 #define D_PROGRESSIVE_SUPPORTED	    /* Progressive JPEG? (Requires MULTISCAN)*/
+#define IDCT_SCALING_SUPPORTED	    /* Output rescaling via IDCT? */
 #define SAVE_MARKERS_SUPPORTED	    /* jpeg_save_markers() needed? */
 #define BLOCK_SMOOTHING_SUPPORTED   /* Block smoothing? (Progressive only) */
-#define IDCT_SCALING_SUPPORTED	    /* Output rescaling via IDCT? */
 #undef  UPSAMPLE_SCALING_SUPPORTED  /* Output rescaling at upsample stage? */
 #define UPSAMPLE_MERGING_SUPPORTED  /* Fast path for sloppy upsampling? */
 #define QUANT_1PASS_SUPPORTED	    /* 1-pass color quantization? */
@@ -320,9 +312,7 @@ typedef int boolean;
  * the offsets will also change the order in which colormap data is organized.
  * RESTRICTIONS:
  * 1. The sample applications cjpeg,djpeg do NOT support modified RGB formats.
- * 2. These macros only affect RGB<=>YCbCr color conversion, so they are not
- *    useful if you are using JPEG color spaces other than YCbCr or grayscale.
- * 3. The color quantizer modules will not behave desirably if RGB_PIXELSIZE
+ * 2. The color quantizer modules will not behave desirably if RGB_PIXELSIZE
  *    is not 3 (they don't understand about dummy color components!).  So you
  *    can't use color quantization if you change that value.
  */
@@ -369,7 +359,7 @@ typedef int boolean;
  */
 
 #ifndef FAST_FLOAT
-#ifdef LIBJPEG_PROTOTYPES
+#ifdef HAVE_PROTOTYPES
 #define FAST_FLOAT  float
 #else
 #define FAST_FLOAT  double

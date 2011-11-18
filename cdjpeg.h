@@ -91,7 +91,7 @@ typedef struct cdjpeg_progress_mgr * cd_progress_ptr;
 
 /* Short forms of external names for systems with brain-damaged linkers. */
 
-#ifdef LIBJPEG_NEED_SHORT_EXTERNAL_NAMES
+#ifdef NEED_SHORT_EXTERNAL_NAMES
 #define jinit_read_bmp		jIRdBMP
 #define jinit_write_bmp		jIWrBMP
 #define jinit_read_gif		jIRdGIF
@@ -104,6 +104,7 @@ typedef struct cdjpeg_progress_mgr * cd_progress_ptr;
 #define jinit_write_targa	jIWrTarga
 #define read_quant_tables	RdQTables
 #define read_scan_script	RdScnScript
+#define set_quality_ratings     SetQRates
 #define set_quant_slots		SetQSlots
 #define set_sample_factors	SetSFacts
 #define read_color_map		RdCMap
@@ -112,7 +113,7 @@ typedef struct cdjpeg_progress_mgr * cd_progress_ptr;
 #define end_progress_monitor	EnProgMon
 #define read_stdin		RdStdin
 #define write_stdout		WrStdout
-#endif /* LIBJPEG_NEED_SHORT_EXTERNAL_NAMES */
+#endif /* NEED_SHORT_EXTERNAL_NAMES */
 
 /* Module selection routines for I/O modules. */
 
@@ -131,8 +132,10 @@ EXTERN(djpeg_dest_ptr) jinit_write_targa JPP((j_decompress_ptr cinfo));
 /* cjpeg support routines (in rdswitch.c) */
 
 EXTERN(boolean) read_quant_tables JPP((j_compress_ptr cinfo, char * filename,
-				    int scale_factor, boolean force_baseline));
+				       boolean force_baseline));
 EXTERN(boolean) read_scan_script JPP((j_compress_ptr cinfo, char * filename));
+EXTERN(boolean) set_quality_ratings JPP((j_compress_ptr cinfo, char *arg,
+					 boolean force_baseline));
 EXTERN(boolean) set_quant_slots JPP((j_compress_ptr cinfo, char *arg));
 EXTERN(boolean) set_sample_factors JPP((j_compress_ptr cinfo, char *arg));
 
@@ -152,7 +155,7 @@ EXTERN(FILE *) write_stdout JPP((void));
 
 /* miscellaneous useful macros */
 
-#ifdef LIBJPEG_DONT_USE_B_MODE		/* define mode parameters for fopen() */
+#ifdef DONT_USE_B_MODE		/* define mode parameters for fopen() */
 #define READ_BINARY	"r"
 #define WRITE_BINARY	"w"
 #else

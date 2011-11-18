@@ -2,6 +2,7 @@
  * cjpeg.c
  *
  * Copyright (C) 1991-1998, Thomas G. Lane.
+ * Modified 2003-2011 by Guido Vollbeding.
  * This file is part of the Independent JPEG Group's software.
  * For conditions of distribution and use, see the accompanying README file.
  *
@@ -9,7 +10,7 @@
  * It should work on any system with Unix- or MS-DOS-style command lines.
  *
  * Two different command line styles are permitted, depending on the
- * compile-time switch LIBJPEG_TWO_FILE_COMMANDLINE:
+ * compile-time switch TWO_FILE_COMMANDLINE:
  *	cjpeg [options]  inputfile outputfile
  *	cjpeg [options]  [inputfile]
  * In the second style, output is always to standard output, which you'd
@@ -82,7 +83,7 @@ select_file_type (j_compress_ptr cinfo, FILE * infile)
   int c;
 
   if (is_targa) {
-#ifdef LIBJPEG_TARGA_SUPPORTED
+#ifdef TARGA_SUPPORTED
     return jinit_read_targa(cinfo);
 #else
     ERREXIT(cinfo, JERR_TGA_NOTCOMP);
@@ -95,23 +96,23 @@ select_file_type (j_compress_ptr cinfo, FILE * infile)
     ERREXIT(cinfo, JERR_UNGETC_FAILED);
 
   switch (c) {
-#ifdef LIBJPEG_BMP_SUPPORTED
+#ifdef BMP_SUPPORTED
   case 'B':
     return jinit_read_bmp(cinfo);
 #endif
-#ifdef LIBJPEG_GIF_SUPPORTED
+#ifdef GIF_SUPPORTED
   case 'G':
     return jinit_read_gif(cinfo);
 #endif
-#ifdef LIBJPEG_PPM_SUPPORTED
+#ifdef PPM_SUPPORTED
   case 'P':
     return jinit_read_ppm(cinfo);
 #endif
-#ifdef LIBJPEG_RLE_SUPPORTED
+#ifdef RLE_SUPPORTED
   case 'R':
     return jinit_read_rle(cinfo);
 #endif
-#ifdef LIBJPEG_TARGA_SUPPORTED
+#ifdef TARGA_SUPPORTED
   case 0x00:
     return jinit_read_targa(cinfo);
 #endif
@@ -142,25 +143,35 @@ usage (void)
 /* complain about bad command line */
 {
   fprintf(stderr, "usage: %s [switches] ", progname);
-#ifdef LIBJPEG_TWO_FILE_COMMANDLINE
+#ifdef TWO_FILE_COMMANDLINE
   fprintf(stderr, "inputfile outputfile\n");
 #else
   fprintf(stderr, "[inputfile]\n");
 #endif
 
   fprintf(stderr, "Switches (names may be abbreviated):\n");
-  fprintf(stderr, "  -quality N     Compression quality (0..100; 5-95 is useful range)\n");
+  fprintf(stderr, "  -quality N[,...]   Compression quality (0..100; 5-95 is useful range)\n");
   fprintf(stderr, "  -grayscale     Create monochrome JPEG file\n");
+  fprintf(stderr, "  -rgb           Create RGB JPEG file\n");
 #ifdef ENTROPY_OPT_SUPPORTED
   fprintf(stderr, "  -optimize      Optimize Huffman table (smaller file, but slow compression)\n");
 #endif
 #ifdef C_PROGRESSIVE_SUPPORTED
   fprintf(stderr, "  -progressive   Create progressive JPEG file\n");
 #endif
-#ifdef LIBJPEG_TARGA_SUPPORTED
+#ifdef DCT_SCALING_SUPPORTED
+  fprintf(stderr, "  -scale M/N     Scale image by fraction M/N, eg, 1/2\n");
+#endif
+#ifdef TARGA_SUPPORTED
   fprintf(stderr, "  -targa         Input file is Targa format (usually not needed)\n");
 #endif
   fprintf(stderr, "Switches for advanced users:\n");
+#ifdef C_ARITH_CODING_SUPPORTED
+  fprintf(stderr, "  -arithmetic    Use arithmetic coding\n");
+#endif
+#ifdef DCT_SCALING_SUPPORTED
+  fprintf(stderr, "  -block N       DCT block size (1..16; default is 8)\n");
+#endif
 #ifdef DCT_ISLOW_SUPPORTED
   fprintf(stderr, "  -dct int       Use integer DCT method%s\n",
 	  (JDCT_DEFAULT == JDCT_ISLOW ? " (default)" : ""));
@@ -173,6 +184,7 @@ usage (void)
   fprintf(stderr, "  -dct float     Use floating-point DCT method%s\n",
 	  (JDCT_DEFAULT == JDCT_FLOAT ? " (default)" : ""));
 #endif
+  fprintf(stderr, "  -nosmooth      Don't use high-quality downsampling\n");
   fprintf(stderr, "  -restart N     Set restart interval in rows, or in blocks with B\n");
 #ifdef INPUT_SMOOTHING_SUPPORTED
   fprintf(stderr, "  -smooth N      Smooth dithered input (N=1..100 is strength)\n");
@@ -181,9 +193,6 @@ usage (void)
   fprintf(stderr, "  -outfile name  Specify name for output file\n");
   fprintf(stderr, "  -verbose  or  -debug   Emit debug output\n");
   fprintf(stderr, "Switches for wizards:\n");
-#ifdef C_ARITH_CODING_SUPPORTED
-  fprintf(stderr, "  -arithmetic    Use arithmetic coding\n");
-#endif
   fprintf(stderr, "  -baseline      Force baseline quantization tables\n");
   fprintf(stderr, "  -qtables file  Use quantization tables given in file\n");
   fprintf(stderr, "  -qslots N[,...]    Set component quantization tables\n");
@@ -209,21 +218,16 @@ parse_switches (j_compress_ptr cinfo, int argc, char **argv,
 {
   int argn;
   char * arg;
-  int quality;			/* -quality parameter */
-  int q_scale_factor;		/* scaling percentage for -qtables */
   boolean force_baseline;
   boolean simple_progressive;
+  char * qualityarg = NULL;	/* saves -quality parm if any */
   char * qtablefile = NULL;	/* saves -qtables filename if any */
   char * qslotsarg = NULL;	/* saves -qslots parm if any */
   char * samplearg = NULL;	/* saves -sample parm if any */
   char * scansarg = NULL;	/* saves -scans parm if any */
 
   /* Set up default JPEG parameters. */
-  /* Note that default -quality level need not, and does not,
-   * match the default scaling for an explicit -qtables argument.
-   */
-  quality = 75;			/* default -quality value */
-  q_scale_factor = 100;		/* default to no scaling for -qtables */
+
   force_baseline = FALSE;	/* by default, allow 16-bit quantizers */
   simple_progressive = FALSE;
   is_targa = FALSE;
@@ -254,9 +258,29 @@ parse_switches (j_compress_ptr cinfo, int argc, char **argv,
       exit(EXIT_FAILURE);
 #endif
 
-    } else if (keymatch(arg, "baseline", 1)) {
+    } else if (keymatch(arg, "baseline", 2)) {
       /* Force baseline-compatible output (8-bit quantizer values). */
       force_baseline = TRUE;
+
+    } else if (keymatch(arg, "block", 2)) {
+      /* Set DCT block size. */
+#if defined(DCT_SCALING_SUPPORTED) && defined(JPEG_LIB_VERSION_MAJOR) && \
+    (JPEG_LIB_VERSION_MAJOR > 8 || (JPEG_LIB_VERSION_MAJOR == 8 && \
+     defined(JPEG_LIB_VERSION_MINOR) && JPEG_LIB_VERSION_MINOR >= 3))
+      int val;
+
+      if (++argn >= argc)	/* advance to next argument */
+	usage();
+      if (sscanf(argv[argn], "%d", &val) != 1)
+	usage();
+      if (val < 1 || val > 16)
+	usage();
+      cinfo->block_size = val;
+#else
+      fprintf(stderr, "%s: sorry, block size setting not supported\n",
+	      progname);
+      exit(EXIT_FAILURE);
+#endif
 
     } else if (keymatch(arg, "dct", 2)) {
       /* Select DCT algorithm. */
@@ -287,6 +311,10 @@ parse_switches (j_compress_ptr cinfo, int argc, char **argv,
       /* Force a monochrome JPEG file to be generated. */
       jpeg_set_colorspace(cinfo, JCS_GRAYSCALE);
 
+    } else if (keymatch(arg, "rgb", 3)) {
+      /* Force an RGB JPEG file to be generated. */
+      jpeg_set_colorspace(cinfo, JCS_RGB);
+
     } else if (keymatch(arg, "maxmemory", 3)) {
       /* Maximum memory in Kb (or Mb with 'm'). */
       long lval;
@@ -299,6 +327,10 @@ parse_switches (j_compress_ptr cinfo, int argc, char **argv,
       if (ch == 'm' || ch == 'M')
 	lval *= 1000L;
       cinfo->mem->max_memory_to_use = lval * 1000L;
+
+    } else if (keymatch(arg, "nosmooth", 3)) {
+      /* Suppress fancy downsampling */
+      cinfo->do_fancy_downsampling = FALSE;
 
     } else if (keymatch(arg, "optimize", 1) || keymatch(arg, "optimise", 1)) {
       /* Enable entropy parm optimization. */
@@ -328,13 +360,10 @@ parse_switches (j_compress_ptr cinfo, int argc, char **argv,
 #endif
 
     } else if (keymatch(arg, "quality", 1)) {
-      /* Quality factor (quantization table scaling factor). */
+      /* Quality ratings (quantization table scaling factors). */
       if (++argn >= argc)	/* advance to next argument */
 	usage();
-      if (sscanf(argv[argn], "%d", &quality) != 1)
-	usage();
-      /* Change scale factor in case -qtables is present. */
-      q_scale_factor = jpeg_quality_scaling(quality);
+      qualityarg = argv[argn];
 
     } else if (keymatch(arg, "qslots", 2)) {
       /* Quantization table slot numbers. */
@@ -382,7 +411,15 @@ parse_switches (j_compress_ptr cinfo, int argc, char **argv,
        * default sampling factors.
        */
 
-    } else if (keymatch(arg, "scans", 2)) {
+    } else if (keymatch(arg, "scale", 4)) {
+      /* Scale the image by a fraction M/N. */
+      if (++argn >= argc)	/* advance to next argument */
+	usage();
+      if (sscanf(argv[argn], "%d/%d",
+		 &cinfo->scale_num, &cinfo->scale_denom) != 2)
+	usage();
+
+    } else if (keymatch(arg, "scans", 4)) {
       /* Set scan script. */
 #ifdef C_MULTISCAN_FILES_SUPPORTED
       if (++argn >= argc)	/* advance to next argument */
@@ -422,11 +459,12 @@ parse_switches (j_compress_ptr cinfo, int argc, char **argv,
 
     /* Set quantization tables for selected quality. */
     /* Some or all may be overridden if -qtables is present. */
-    jpeg_set_quality(cinfo, quality, force_baseline);
+    if (qualityarg != NULL)	/* process -quality if it was present */
+      if (! set_quality_ratings(cinfo, qualityarg, force_baseline))
+	usage();
 
     if (qtablefile != NULL)	/* process -qtables if it was present */
-      if (! read_quant_tables(cinfo, qtablefile,
-			      q_scale_factor, force_baseline))
+      if (! read_quant_tables(cinfo, qtablefile, force_baseline))
 	usage();
 
     if (qslotsarg != NULL)	/* process -qslots if it was present */
@@ -462,7 +500,7 @@ main (int argc, char **argv)
 {
   struct jpeg_compress_struct cinfo;
   struct jpeg_error_mgr jerr;
-#ifdef LIBJPEG_PROGRESS_REPORT
+#ifdef PROGRESS_REPORT
   struct cdjpeg_progress_mgr progress;
 #endif
   int file_index;
@@ -489,7 +527,7 @@ main (int argc, char **argv)
   jerr.last_addon_message = JMSG_LASTADDONCODE;
 
   /* Now safe to enable signal catcher. */
-#ifdef LIBJPEG_NEED_SIGNAL_CATCHER
+#ifdef NEED_SIGNAL_CATCHER
   enable_signal_catcher((j_common_ptr) &cinfo);
 #endif
 
@@ -510,7 +548,7 @@ main (int argc, char **argv)
 
   file_index = parse_switches(&cinfo, argc, argv, 0, FALSE);
 
-#ifdef LIBJPEG_TWO_FILE_COMMANDLINE
+#ifdef TWO_FILE_COMMANDLINE
   /* Must have either -outfile switch or explicit output file name */
   if (outfilename == NULL) {
     if (file_index != argc-2) {
@@ -532,7 +570,7 @@ main (int argc, char **argv)
     fprintf(stderr, "%s: only one input file\n", progname);
     usage();
   }
-#endif /* LIBJPEG_TWO_FILE_COMMANDLINE */
+#endif /* TWO_FILE_COMMANDLINE */
 
   /* Open the input file. */
   if (file_index < argc) {
@@ -556,7 +594,7 @@ main (int argc, char **argv)
     output_file = write_stdout();
   }
 
-#ifdef LIBJPEG_PROGRESS_REPORT
+#ifdef PROGRESS_REPORT
   start_progress_monitor((j_common_ptr) &cinfo, &progress);
 #endif
 
@@ -596,7 +634,7 @@ main (int argc, char **argv)
   if (output_file != stdout)
     fclose(output_file);
 
-#ifdef LIBJPEG_PROGRESS_REPORT
+#ifdef PROGRESS_REPORT
   end_progress_monitor((j_common_ptr) &cinfo);
 #endif
 

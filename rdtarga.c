@@ -19,15 +19,15 @@
 
 #include "cdjpeg.h"		/* Common decls for cjpeg/djpeg applications */
 
-#ifdef LIBJPEG_TARGA_SUPPORTED
+#ifdef TARGA_SUPPORTED
 
 
 /* Macros to deal with unsigned chars as efficiently as compiler allows */
 
-#ifdef LIBJPEG_HAVE_UNSIGNED_CHAR
+#ifdef HAVE_UNSIGNED_CHAR
 typedef unsigned char U_CHAR;
 #define UCH(x)	((int) (x))
-#else /* !LIBJPEG_HAVE_UNSIGNED_CHAR */
+#else /* !HAVE_UNSIGNED_CHAR */
 #ifdef CHAR_IS_UNSIGNED
 typedef char U_CHAR;
 #define UCH(x)	((int) (x))
@@ -35,7 +35,7 @@ typedef char U_CHAR;
 typedef char U_CHAR;
 #define UCH(x)	((int) (x) & 0xFF)
 #endif
-#endif /* LIBJPEG_HAVE_UNSIGNED_CHAR */
+#endif /* HAVE_UNSIGNED_CHAR */
 
 
 #define	ReadOK(file,buffer,len)	(JFREAD(file,buffer,len) == ((size_t) (len)))
@@ -497,4 +497,4 @@ jinit_read_targa (j_compress_ptr cinfo)
   return (cjpeg_source_ptr) source;
 }
 
-#endif /* LIBJPEG_TARGA_SUPPORTED */
+#endif /* TARGA_SUPPORTED */

@@ -16,7 +16,7 @@
 
 #include "cdjpeg.h"		/* Common decls for cjpeg/djpeg applications */
 
-#ifdef LIBJPEG_TARGA_SUPPORTED
+#ifdef TARGA_SUPPORTED
 
 
 /*
@@ -250,4 +250,4 @@ jinit_write_targa (j_decompress_ptr cinfo)
   return (djpeg_dest_ptr) dest;
 }
 
-#endif /* LIBJPEG_TARGA_SUPPORTED */
+#endif /* TARGA_SUPPORTED */

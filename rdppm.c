@@ -2,6 +2,7 @@
  * rdppm.c
  *
  * Copyright (C) 1991-1997, Thomas G. Lane.
+ * Modified 2009 by Bill Allombert, Guido Vollbeding.
  * This file is part of the Independent JPEG Group's software.
  * For conditions of distribution and use, see the accompanying README file.
  *
@@ -20,7 +21,7 @@
 
 #include "cdjpeg.h"		/* Common decls for cjpeg/djpeg applications */
 
-#ifdef LIBJPEG_PPM_SUPPORTED
+#ifdef PPM_SUPPORTED
 
 
 /* Portions of this code are based on the PBMPLUS library, which is:
@@ -38,10 +39,10 @@
 
 /* Macros to deal with unsigned chars as efficiently as compiler allows */
 
-#ifdef LIBJPEG_HAVE_UNSIGNED_CHAR
+#ifdef HAVE_UNSIGNED_CHAR
 typedef unsigned char U_CHAR;
 #define UCH(x)	((int) (x))
-#else /* !LIBJPEG_HAVE_UNSIGNED_CHAR */
+#else /* !HAVE_UNSIGNED_CHAR */
 #ifdef CHAR_IS_UNSIGNED
 typedef char U_CHAR;
 #define UCH(x)	((int) (x))
@@ -49,7 +50,7 @@ typedef char U_CHAR;
 typedef char U_CHAR;
 #define UCH(x)	((int) (x) & 0xFF)
 #endif
-#endif /* LIBJPEG_HAVE_UNSIGNED_CHAR */
+#endif /* HAVE_UNSIGNED_CHAR */
 
 
 #define	ReadOK(file,buffer,len)	(JFREAD(file,buffer,len) == ((size_t) (len)))
@@ -455,4 +456,4 @@ jinit_read_ppm (j_compress_ptr cinfo)
   return (cjpeg_source_ptr) source;
 }
 
-#endif /* LIBJPEG_PPM_SUPPORTED */
+#endif /* PPM_SUPPORTED */
