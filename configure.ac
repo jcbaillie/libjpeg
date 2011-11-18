@@ -8,7 +8,7 @@
 AC_INIT([libjpeg], [8.4.0])
 
 # Directory where autotools helper scripts lives.
-AC_CONFIG_AUX_DIR([.])
+AC_CONFIG_AUX_DIR([build-aux])
 
 # Generate configuration headers.
 AC_CONFIG_HEADERS([jconfig.h:jconfig.cfg])
@@ -21,7 +21,8 @@ AC_CANONICAL_TARGET
 
 # Initialize Automake
 # Don't require all the GNU mandated files
-AM_INIT_AUTOMAKE([-Wall -Werror ansi2knr no-dist foreign])
+AM_INIT_AUTOMAKE([1.11.1 build-aux/ansi2knr foreign silent-rules
+                  -Wall -Werror])
 
 # Make --enable-silent-rules the default.
 # To get verbose build output you may configure
