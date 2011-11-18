@@ -62,17 +62,17 @@ TESTFILES= testorig.jpg testimg.ppm testimg.bmp testimg.jpg testprog.jpg \
         testimgp.jpg
 
 # libtool libraries to build
-lib_LTLIBRARIES = libjpeg.la
+lib_LTLIBRARIES = lib@LIBJPEG_NAME@@LIBSFX@.la
 
 # Library sources for libjpeg.la
-libjpeg_la_SOURCES = $(LIBSOURCES)
+lib@LIBJPEG_NAME@@LIBSFX@_la_SOURCES = $(LIBSOURCES)
 
 # LDFLAGS for libjpeg.la
-libjpeg_la_LDFLAGS = -no-undefined \
+lib@LIBJPEG_NAME@@LIBSFX@_la_LDFLAGS = -no-undefined \
         -version-info $(JPEG_LIB_VERSION)
 
 if HAVE_LD_VERSION_SCRIPT
-  libjpeg_la_LDFLAGS += -Wl,--version-script=$(srcdir)/libjpeg.map
+  lib@LIBJPEG_NAME@@LIBSFX@_la_LDFLAGS += -Wl,--version-script=$(srcdir)/libjpeg.map
 endif
 
 # Executables to build
@@ -81,12 +81,12 @@ bin_PROGRAMS = cjpeg djpeg jpegtran rdjpgcom wrjpgcom
 # Executable sources & libs
 cjpeg_SOURCES    = cjpeg.c rdppm.c rdgif.c rdtarga.c rdrle.c rdbmp.c \
         rdswitch.c cdjpeg.c
-cjpeg_LDADD      = libjpeg.la
+cjpeg_LDADD      = lib@LIBJPEG_NAME@@LIBSFX@.la
 djpeg_SOURCES    = djpeg.c wrppm.c wrgif.c wrtarga.c wrrle.c wrbmp.c \
         rdcolmap.c cdjpeg.c
-djpeg_LDADD      = libjpeg.la
+djpeg_LDADD      = lib@LIBJPEG_NAME@@LIBSFX@.la
 jpegtran_SOURCES = jpegtran.c rdswitch.c cdjpeg.c transupp.c
-jpegtran_LDADD   = libjpeg.la
+jpegtran_LDADD   = lib@LIBJPEG_NAME@@LIBSFX@.la
 rdjpgcom_SOURCES = rdjpgcom.c
 wrjpgcom_SOURCES = wrjpgcom.c
 

@@ -272,6 +272,16 @@ AC_MSG_RESULT(Assuming that it does.))
 AC_LIBTOOL_WIN32_DLL
 AC_PROG_LIBTOOL
 
+# The name of the library to build (not including the "lib" prefix).
+# Defaults to "jpeg", but can be changed to another name to avoid
+# conflicts with system libraries.
+: ${LIBJPEG_NAME=jpeg}
+AC_SUBST([LIBJPEG_NAME])
+
+# A suffix to the library name.  Can be empty, or, for instance,
+# "-debug".
+AC_SUBST([LIBSFX])
+
 # Select memory manager depending on user input.
 # If no "-enable-maxmem", use jmemnobs
 MEMORYMGR='jmemnobs'
