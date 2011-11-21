@@ -1,9 +1,15 @@
 #! /bin/sh
 
-## We embed the libtool dependencies in the repository, so don't
-## call libtoolize automatically here.  Only if it is defined.
+# bootstrap might bring some files in these directories.
+mkdir -p build-aux/m4
 
-: ${LIBTOOLIZE=true}
-export LIBTOOLIZE
+## Don't run autoheader, use jconfig.cfg as is.
+: ${AUTOHEADER=true}
+export AUTOHEADER
+
+## Do run libtoolize, in spite of what bootstrap from Urbi might say.
+case $LIBTOOLIZE in
+  (true) unset LIBTOOLIZE
+esac
 
 autoreconf -f -v -i

@@ -5,6 +5,8 @@
 #  This file is written by Bob Friesenhahn, Guido Vollbeding
 #
 
+ACLOCAL_AMFLAGS = -I build-aux/m4
+
 # Sources to build library
 LIBSOURCES = jaricom.c jcapimin.c jcapistd.c jcarith.c jccoefct.c jccolor.c \
         jcdctmgr.c jchuff.c jcinit.c jcmainct.c jcmarker.c jcmaster.c \

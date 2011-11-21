@@ -9,6 +9,7 @@ AC_INIT([libjpeg], [8.4.0])
 
 # Directory where autotools helper scripts lives.
 AC_CONFIG_AUX_DIR([build-aux])
+AC_CONFIG_MACRO_DIR([build-aux/m4])
 
 # Generate configuration headers.
 AC_CONFIG_HEADERS([jconfig.h:jconfig.cfg])
