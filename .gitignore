@@ -7,7 +7,8 @@ build-aux/depcomp
 build-aux/install-sh
 build-aux/missing
 build-aux/ltmain.sh
-build-aux/m4
+build-aux/m4/libtool.m4
+build-aux/m4/lt*.m4
 config.hin
 config.hin~
 configure

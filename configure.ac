@@ -270,9 +270,7 @@ AC_DEFINE([DONT_USE_B_MODE],[1],[Don't open files in binary mode.])],
 AC_MSG_RESULT(Assuming that it does.))
 
 # Configure libtool.
-LT_PREREQ([2.2.6])
-LT_INIT([win32-dll])
-AC_SUBST([LIBTOOL_DEPS])
+URBI_LIBTOOL
 
 # The name of the library to build (not including the "lib" prefix).
 # Defaults to "jpeg", but can be changed to another name to avoid
