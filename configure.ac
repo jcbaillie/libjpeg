@@ -46,6 +46,17 @@ AC_PROG_INSTALL
 AC_PROG_MAKE_SET
 AC_PROG_LN_S
 
+# Additional flags.
+AC_ARG_WITH([cflags],
+            [AC_HELP_STRING([--with-cflags=FLAGS],
+                            [additional compiler flags])],
+            [CFLAGS="$CFLAGS $with_cflags"])
+
+AC_ARG_WITH([ldflags],
+            [AC_HELP_STRING([--with-ldflags=FLAGS],
+                            [additional linker flags])],
+            [LDFLAGS="$LDFLAGS $with_ldflags"])
+
 # Whether to build the programs.
 AC_ARG_ENABLE([programs],
               [AC_HELP_STRING([--disable-programs],
