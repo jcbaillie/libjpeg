@@ -75,7 +75,7 @@ lib@LIBJPEG_NAME@@LIBSFX@_la_SOURCES = $(LIBSOURCES)
 # Flags for libjpeg.la
 lib@LIBJPEG_NAME@@LIBSFX@_la_CPPFLAGS = -DBUILDING_JPEG
 lib@LIBJPEG_NAME@@LIBSFX@_la_LDFLAGS = -no-undefined \
-        -version-info $(JPEG_LIB_VERSION)
+        -avoid-version
 
 if HAVE_LD_VERSION_SCRIPT
   lib@LIBJPEG_NAME@@LIBSFX@_la_LDFLAGS += -Wl,--version-script=$(srcdir)/libjpeg.map
