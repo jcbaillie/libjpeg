@@ -82,7 +82,7 @@ if HAVE_LD_VERSION_SCRIPT
 endif
 
 # Executables to build
-bin_PROGRAMS = cjpeg djpeg jpegtran rdjpgcom wrjpgcom
+jpeg_programs = cjpeg djpeg jpegtran rdjpgcom wrjpgcom
 
 # Executable sources & libs
 cjpeg_SOURCES    = cjpeg.c rdppm.c rdgif.c rdtarga.c rdrle.c rdbmp.c \
@@ -96,31 +96,15 @@ jpegtran_LDADD   = lib@LIBJPEG_NAME@@LIBSFX@.la
 rdjpgcom_SOURCES = rdjpgcom.c
 wrjpgcom_SOURCES = wrjpgcom.c
 
+if PROGRAMS
+bin_PROGRAMS = $(jpeg_programs)
+
 # Manual pages to install
 man_MANS = $(DISTMANS)
-
-# Headers to install
-include_HEADERS = $(INSTINCLUDES)
-
-# Other distributed headers
-noinst_HEADERS = $(OTHERINCLUDES)
-
-# Other distributed files
-EXTRA_DIST =  $(DOCS) $(DISTMANS) $(MKFILES) $(CONFIGFILES) $(SYSDEPSOURCES) \
-        $(OTHERFILES) $(TESTFILES)
 
 # Files to be cleaned
 CLEANFILES = testout.ppm testout.bmp testout.jpg testoutp.ppm testoutp.jpg \
         testoutt.jpg
-
-# Install jconfig.h
-install-data-local:
-	$(mkinstalldirs) $(DESTDIR)$(includedir)
-	$(INSTALL_HEADER) jconfig.h $(DESTDIR)$(includedir)/jconfig.h
-
-# Uninstall jconfig.h
-uninstall-local:
-	rm -f $(DESTDIR)$(includedir)/jconfig.h
 
 # Run tests
 test: check-local
@@ -138,3 +122,25 @@ check-local:
 	cmp $(srcdir)/testimg.ppm testoutp.ppm
 	cmp $(srcdir)/testimgp.jpg testoutp.jpg
 	cmp $(srcdir)/testorig.jpg testoutt.jpg
+else
+EXTRA_PROGRAMS = $(jpeg_programs)
+endif
+
+# Headers to install
+include_HEADERS = $(INSTINCLUDES)
+
+# Other distributed headers
+noinst_HEADERS = $(OTHERINCLUDES)
+
+# Other distributed files
+EXTRA_DIST =  $(DOCS) $(DISTMANS) $(MKFILES) $(CONFIGFILES) $(SYSDEPSOURCES) \
+        $(OTHERFILES) $(TESTFILES)
+
+# Install jconfig.h
+install-data-local:
+	$(mkinstalldirs) $(DESTDIR)$(includedir)
+	$(INSTALL_HEADER) jconfig.h $(DESTDIR)$(includedir)/jconfig.h
+
+# Uninstall jconfig.h
+uninstall-local:
+	rm -f $(DESTDIR)$(includedir)/jconfig.h

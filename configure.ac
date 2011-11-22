@@ -46,6 +46,14 @@ AC_PROG_INSTALL
 AC_PROG_MAKE_SET
 AC_PROG_LN_S
 
+# Whether to build the programs.
+AC_ARG_ENABLE([programs],
+              [AC_HELP_STRING([--disable-programs],
+                              [just build the library, not the programs])],
+              [], [enable_programs=yes])
+AM_CONDITIONAL([PROGRAMS], [test x"$enable_programs" == xyes])
+
+
 # Check if LD supports linker scripts,
 # and define automake conditional HAVE_LD_VERSION_SCRIPT if so.
 AC_ARG_ENABLE([ld-version-script],
