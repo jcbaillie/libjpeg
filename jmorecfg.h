@@ -195,6 +195,8 @@ typedef unsigned int JDIMENSION;
 # else
 #  define JPEG_API
 # endif
+#else
+#  define JPEG_API
 #endif
 
 
