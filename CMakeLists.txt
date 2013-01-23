@@ -6,6 +6,7 @@ find_package(qibuild)
 qi_sanitize_compile_flags(HIDDEN_SYMBOLS)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
+add_definitions(-DJPEG_INTERNAL)
 
 set(SOURCES
   jaricom.c jcapimin.c jcapistd.c jcarith.c jccoefct.c jccolor.c

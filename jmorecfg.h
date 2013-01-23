@@ -183,6 +183,7 @@ typedef unsigned int JDIMENSION;
 /* Handle the visibility of the symbols.  Under MSVC, export during
  * compilation, import when using them.
  */
+#ifndef JPEG_INTERNAL
 # ifdef _MSC_VER
 #  ifdef BUILDING_JPEG
 #   define JPEG_API __declspec(dllexport)
@@ -194,6 +195,7 @@ typedef unsigned int JDIMENSION;
 # else
 #  define JPEG_API
 # endif
+#endif
 
 
 /* These macros are used in all function definitions and extern declarations.
