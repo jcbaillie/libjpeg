@@ -12,3 +12,4 @@ build-aux/m4/lt*.m4
 config.hin
 config.hin~
 configure
+build-sys-linux-x86_64/
